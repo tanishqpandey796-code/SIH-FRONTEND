@@ -1,0 +1,2269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Official Cooperative-Owned Digital Service Marketplace for Household & Community Services - Ministry of Cooperation, Govt of India (Smart India Hackathon 2026 Problem ID: SIH26089)." />
+  <meta name="keywords" content="Cooperative Gig Platform, Labour Cooperative Societies, Household Services, Electrician, Caregiver, Plumber, Fair Wages, Ministry of Cooperation, SIH2026" />
+  <meta name="author" content="Antigravity AI - SIH 2026 Submission" />
+  <title>Sahakar Gig Platform | Cooperative Household Services (SIH26089)</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Core Design System CSS -->
+  <link rel="stylesheet" href="./src/styles.css" />
+
+  <!-- React 18 & Babel Standalone (Local with CDN fallback) -->
+  <script src="./libs/react.production.min.js"></script>
+  <script src="./libs/react-dom.production.min.js"></script>
+  <script src="./libs/babel.min.js"></script>
+
+  <script>
+    window.onerror = function(message, source, lineno, colno, error) {
+      console.error("Global Error Caught:", message, error);
+      const root = document.getElementById('root');
+      if (root && !root.hasChildNodes() || root.innerText.includes('Loading')) {
+        root.innerHTML = '<div style="max-width:600px;margin:50px auto;padding:2rem;background:#FEF2F2;border:2px solid #EF4444;border-radius:12px;font-family:sans-serif;color:#991B1B;">' +
+          '<h3 style="margin-top:0;">⚠️ Platform Loading Error</h3>' +
+          '<p><strong>Error:</strong> ' + message + '</p>' +
+          '<p style="font-size:0.85rem;color:#666;">Line: ' + lineno + ' | Source: ' + source + '</p>' +
+          '<p>Please ensure you are opening via <code>http://localhost:3000</code> or refresh the page.</p>' +
+          '</div>';
+      }
+    };
+  </script>
+</head>
+<body>
+  <div id="root">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;font-family:'Plus Jakarta Sans',sans-serif;text-align:center;">
+      <div style="width:60px;height:60px;border-radius:14px;background:linear-gradient(135deg,#0F2C59,#1E3A8A);color:white;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;margin-bottom:1rem;box-shadow:0 10px 25px rgba(15,44,89,0.2);border:2px solid #F59E0B;">सह</div>
+      <h2 style="font-size:1.5rem;font-weight:800;color:#0F2C59;margin-bottom:0.5rem;">सहकार GIG PLATFORM</h2>
+      <p style="color:#64748B;font-size:0.95rem;max-width:400px;margin-bottom:1.5rem;">Ministry of Cooperation • Smart India Hackathon 2026 (SIH26089)</p>
+      <div style="width:36px;height:36px;border:3px solid #E2E8F0;border-top-color:#059669;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+      <style>@keyframes spin{to{transform:rotate(360deg);}}</style>
+    </div>
+  </div>
+
+  <script type="text/babel">
+    // =========================================================================
+    // SAHAKAR GIG PLATFORM - SINGLE FILE BUILD (SIH26089)
+    // All components consolidated for reliable CDN-based React rendering
+    // =========================================================================
+
+    const { useState } = React;
+
+    // =========================================================================
+    // MOCK DATA
+    // =========================================================================
+
+    const SERVICE_CATEGORIES = [
+      {
+        id: 'electrical',
+        name: 'Electricians & Wiring',
+        icon: 'Zap',
+        badge: 'High Demand',
+        desc: 'Fault repairing, MCB installation, appliance wiring, LED fitting & earthing',
+        basePrice: 299,
+        workersAvailable: 42
+      },
+      {
+        id: 'plumbing',
+        name: 'Plumbing & Sanitation',
+        icon: 'Droplets',
+        badge: 'Popular',
+        desc: 'Pipe leak fix, tap fitting, tank cleaning, toilet repairs & drainage clearing',
+        basePrice: 249,
+        workersAvailable: 38
+      },
+      {
+        id: 'carpentry',
+        name: 'Carpentry & Woodwork',
+        icon: 'Hammer',
+        badge: 'Certified',
+        desc: 'Furniture repair, door lock installation, custom shelving & modular fitting',
+        basePrice: 349,
+        workersAvailable: 29
+      },
+      {
+        id: 'painting',
+        name: 'Painters & Wall Polish',
+        icon: 'Paintbrush',
+        badge: 'Eco-Friendly',
+        desc: 'Interior/exterior whitewash, texture paint, waterproofing & wood polish',
+        basePrice: 499,
+        workersAvailable: 31
+      },
+      {
+        id: 'caregiver',
+        name: 'Caregivers & Elderly Care',
+        icon: 'HeartHandshake',
+        badge: 'Verified Skilled',
+        desc: 'Daily mobility assistance, medication routine, post-op nursing & companionship',
+        basePrice: 599,
+        workersAvailable: 24
+      },
+      {
+        id: 'domestic_help',
+        name: 'Domestic Helpers & Cooks',
+        icon: 'Utensils',
+        badge: 'Background Checked',
+        desc: 'Home cooking, dishwashing, deep house cleaning, laundry & child oversight',
+        basePrice: 299,
+        workersAvailable: 65
+      },
+      {
+        id: 'driver',
+        name: 'Drivers & Valet',
+        icon: 'Car',
+        badge: 'On-Demand',
+        desc: 'Outstation trips, daily commute driver, commercial transport & night valet',
+        basePrice: 399,
+        workersAvailable: 19
+      },
+      {
+        id: 'gardener',
+        name: 'Gardeners & Landscaping',
+        icon: 'Sprout',
+        badge: 'Green Skill',
+        desc: 'Lawn trimming, plant potting, organic pest control & balcony garden setup',
+        basePrice: 279,
+        workersAvailable: 16
+      },
+      {
+        id: 'cleaning',
+        name: 'Deep Cleaning & Sanitization',
+        icon: 'Sparkles',
+        badge: 'Govt Approved',
+        desc: 'Sofa/carpet shampooing, kitchen deep clean, bathroom scrubbing & pest control',
+        basePrice: 449,
+        workersAvailable: 47
+      },
+      {
+        id: 'technician',
+        name: 'Appliance Technicians',
+        icon: 'Wrench',
+        badge: 'Expert Master',
+        desc: 'AC service & gas refill, refrigerator, washing machine & RO water filter repair',
+        basePrice: 399,
+        workersAvailable: 33
+      }
+    ];
+
+    const SAMPLE_WORKERS = [
+      {
+        id: 'WKR-101',
+        name: 'Ramesh Kumar Verma',
+        role: 'Master Electrician',
+        categoryId: 'electrical',
+        society: 'South Delhi Labour Cooperative Federation #402',
+        societyRegNo: 'ND-LAB-2018-992',
+        experience: '12 Years',
+        rating: 4.9,
+        reviewsCount: 142,
+        completedJobs: 489,
+        distanceKm: 1.2,
+        badge: 'Govt Certified',
+        hourlyRate: 350,
+        photo: 'https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=150&auto=format&fit=crop&q=80',
+        verified: true,
+        verificationDate: '2024-01-15',
+        policeCleared: true,
+        insuranceCovered: true,
+        insurancePolicy: 'PM-Suraksha-Bima #8839201',
+        phone: '+91 98765 43210',
+        location: 'Lajpat Nagar IV, New Delhi',
+        lat: 28.5672,
+        lng: 77.2435,
+        skills: ['3-Phase Wiring', 'Appliance Earthing', 'Industrial Panel Box', 'Smart Meter Fitting'],
+        standbySOS: true
+      },
+      {
+        id: 'WKR-102',
+        name: 'Sunita Devi',
+        role: 'Senior Caregiver & Nurse',
+        categoryId: 'caregiver',
+        society: 'Mahila Utthan Sahakari Samiti #108',
+        societyRegNo: 'DL-WOM-2020-112',
+        experience: '8 Years',
+        rating: 4.95,
+        reviewsCount: 210,
+        completedJobs: 620,
+        distanceKm: 1.8,
+        badge: 'Coop Leader',
+        hourlyRate: 400,
+        photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
+        verified: true,
+        verificationDate: '2023-11-20',
+        policeCleared: true,
+        insuranceCovered: true,
+        insurancePolicy: 'Sahakar Health Shield #90214',
+        phone: '+91 98123 55678',
+        location: 'Defence Colony, New Delhi',
+        lat: 28.5721,
+        lng: 77.2312,
+        skills: ['Geriatric Care', 'Physiotherapy Assist', 'Vital Monitoring', 'Dementia Care'],
+        standbySOS: true
+      },
+      {
+        id: 'WKR-103',
+        name: 'Gurpreet Singh',
+        role: 'Sanitation & Plumbing Expert',
+        categoryId: 'plumbing',
+        society: 'Capital Labour Construction & Maintenance Society',
+        societyRegNo: 'DL-LAB-2016-044',
+        experience: '10 Years',
+        rating: 4.85,
+        reviewsCount: 98,
+        completedJobs: 340,
+        distanceKm: 2.4,
+        badge: 'Master Plumber',
+        hourlyRate: 320,
+        photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+        verified: true,
+        verificationDate: '2024-02-10',
+        policeCleared: true,
+        insuranceCovered: true,
+        insurancePolicy: 'PM-Jeevan-Jyoti #776211',
+        phone: '+91 99543 21098',
+        location: 'Greater Kailash 1, New Delhi',
+        lat: 28.5482,
+        lng: 77.2341,
+        skills: ['Hydro-Jetting Pipe Clearing', 'CPVC Fitting', 'Geyser Installation', 'Overhead Tank Clean'],
+        standbySOS: false
+      },
+      {
+        id: 'WKR-104',
+        name: 'Mohd. Imran Khan',
+        role: 'Master Carpenter & Joiner',
+        categoryId: 'carpentry',
+        society: 'National Craft Workers Cooperative Union',
+        societyRegNo: 'IN-LAB-2015-883',
+        experience: '15 Years',
+        rating: 4.9,
+        reviewsCount: 175,
+        completedJobs: 512,
+        distanceKm: 3.1,
+        badge: 'Craft Specialist',
+        hourlyRate: 380,
+        photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+        verified: true,
+        verificationDate: '2023-09-01',
+        policeCleared: true,
+        insuranceCovered: true,
+        insurancePolicy: 'Craft Workers Mutual Shield #1109',
+        phone: '+91 97112 88901',
+        location: 'Okhla Phase 3, New Delhi',
+        lat: 28.5355,
+        lng: 77.2611,
+        skills: ['Modular Kitchen Fitting', 'Antique Restoration', 'Door Lock Installation', 'Plywood Work'],
+        standbySOS: true
+      },
+      {
+        id: 'WKR-105',
+        name: 'Asha Rani',
+        role: 'Culinary & Domestic Housekeeper',
+        categoryId: 'domestic_help',
+        society: 'Delhi Mahila Shramik Sahakari Bank Federation',
+        societyRegNo: 'DL-SHR-2021-309',
+        experience: '6 Years',
+        rating: 4.88,
+        reviewsCount: 130,
+        completedJobs: 410,
+        distanceKm: 0.9,
+        badge: 'Top Rated',
+        hourlyRate: 280,
+        photo: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&auto=format&fit=crop&q=80',
+        verified: true,
+        verificationDate: '2024-03-02',
+        policeCleared: true,
+        insuranceCovered: true,
+        insurancePolicy: 'Shramik Kalyan Bima #99401',
+        phone: '+91 98987 11223',
+        location: 'Kotla Mubarakpur, New Delhi',
+        lat: 28.5790,
+        lng: 77.2255,
+        skills: ['North & South Indian Cuisine', 'Deep Kitchen Sanitization', 'Fabric Care', 'Meal Prep'],
+        standbySOS: false
+      }
+    ];
+
+    const INITIAL_BOOKINGS = [
+      {
+        id: 'BK-2026-8801',
+        serviceName: 'Electrician & Wiring Repair',
+        workerName: 'Ramesh Kumar Verma',
+        workerRole: 'Master Electrician',
+        society: 'South Delhi Labour Cooperative Federation #402',
+        date: '2026-09-04',
+        time: '10:00 AM',
+        status: 'Confirmed',
+        address: 'B-42, Gulmohar Park, New Delhi',
+        totalAmount: 399,
+        workerPayout: 359,
+        societyDividend: 20,
+        welfareContribution: 20,
+        paymentStatus: 'Paid via UPI',
+        otp: '4892'
+      },
+      {
+        id: 'BK-2026-8794',
+        serviceName: 'Elderly Caregiver Session (4 Hrs)',
+        workerName: 'Sunita Devi',
+        workerRole: 'Senior Caregiver',
+        society: 'Mahila Utthan Sahakari Samiti #108',
+        date: '2026-09-03',
+        time: '02:00 PM',
+        status: 'In Progress',
+        address: 'Flat 102, Green Park Main, New Delhi',
+        totalAmount: 1199,
+        workerPayout: 1079,
+        societyDividend: 60,
+        welfareContribution: 60,
+        paymentStatus: 'Paid via NetBanking',
+        otp: '1093'
+      }
+    ];
+
+    const PENDING_VERIFICATIONS = [
+      {
+        id: 'VER-901',
+        name: 'Sanjay Vishwakarma',
+        role: 'Technician & Refrigerator Expert',
+        society: 'North District Labour Cooperative Federation',
+        phone: '+91 98111 00299',
+        appliedDate: '2026-09-02',
+        aadharVerified: true,
+        policeVerificationDoc: 'Police_Clearance_DL2026.pdf',
+        skillCertificateDoc: 'ITI_Electrical_Certificate_2020.pdf',
+        status: 'Pending Verification'
+      },
+      {
+        id: 'VER-902',
+        name: 'Pooja Sharma',
+        role: 'Caregiver & Nursing Attendant',
+        society: 'Mahila Swavalamban Sahakari Society #55',
+        phone: '+91 99200 44112',
+        appliedDate: '2026-09-03',
+        aadharVerified: true,
+        policeVerificationDoc: 'Police_Clearance_DL8821.pdf',
+        skillCertificateDoc: 'Nursing_Attendant_Diploma.pdf',
+        status: 'Pending Verification'
+      }
+    ];
+
+    const FEDERATION_STATS = {
+      totalRegisteredWorkers: 14850,
+      activeSocieties: 142,
+      completedJobsMonth: 42390,
+      fairWagePaid: '₹1.84 Crore',
+      welfareFundBalance: '₹28.5 Lakhs',
+      activeInsurancePolicies: 13910,
+      avgWorkerRating: 4.88,
+      commercialCutComparison: '30% saved from private intermediaries'
+    };
+
+    // =========================================================================
+    // HELPER FUNCTIONS
+    // =========================================================================
+
+    function getCategoryEmoji(id) {
+      const map = {
+        electrical: '⚡',
+        plumbing: '🚰',
+        carpentry: '🪚',
+        painting: '🎨',
+        caregiver: '🩺',
+        domestic_help: '🍲',
+        driver: '🚘',
+        gardener: '🪴',
+        cleaning: '🧹',
+        technician: '🔧'
+      };
+      return map[id] || '🛠️';
+    }
+
+    // =========================================================================
+    // HEADER COMPONENT
+    // =========================================================================
+
+    function Header({ activeRole, setActiveRole, onOpenSOS, bookingCount }) {
+      return (
+        <header className="header-wrapper">
+          <div className="govt-banner">
+            <div className="container govt-banner-content">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <span>🇮🇳 Ministry of Cooperation | Govt of India</span>
+                <span style={{ opacity: 0.6 }}>•</span>
+                <span>Labour Cooperative Digital Marketplace Platform</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <span className="sih-badge-pill">SIH 2026 Problem ID: SIH26089</span>
+                <span style={{ fontSize: '0.75rem', opacity: 0.9 }}>Toll Free Welfare Helpline: 1800-11-SAHAKAR</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="container header-container">
+            <div className="brand-section">
+              <div className="emblem-badge">सह</div>
+              <div className="brand-text">
+                <h1>
+                  सहकार GIG 
+                  <span style={{ 
+                    background: '#ECFDF5', 
+                    color: '#047857', 
+                    padding: '2px 8px', 
+                    borderRadius: '12px', 
+                    fontSize: '0.7rem',
+                    border: '1px solid #A7F3D0'
+                  }}>Verified Cooperative</span>
+                </h1>
+                <span>Cooperative Household & Community Services Portal</span>
+              </div>
+            </div>
+
+            <div className="role-switcher">
+              <button 
+                className={`role-btn ${activeRole === 'customer' ? 'active' : ''}`}
+                onClick={() => setActiveRole('customer')}
+              >
+                🏠 Household Customer
+              </button>
+              <button 
+                className={`role-btn ${activeRole === 'worker' ? 'active' : ''}`}
+                onClick={() => setActiveRole('worker')}
+              >
+                🛠️ Sahakar Worker Workspace
+              </button>
+              <button 
+                className={`role-btn ${activeRole === 'admin' ? 'active' : ''}`}
+                onClick={() => setActiveRole('admin')}
+              >
+                🏛️ Federation Admin
+              </button>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              {activeRole === 'customer' && (
+                <button className="sos-trigger-btn" onClick={onOpenSOS}>
+                  🚨 1-Click SOS Booking
+                </button>
+              )}
+
+              {bookingCount > 0 && activeRole === 'customer' && (
+                <div style={{
+                  background: '#0F2C59',
+                  color: 'white',
+                  padding: '6px 14px',
+                  borderRadius: '20px',
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem'
+                }}>
+                  <span>📋 Active Bookings:</span>
+                  <span style={{ background: '#F59E0B', color: '#000', padding: '2px 8px', borderRadius: '10px' }}>
+                    {bookingCount}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        </header>
+      );
+    }
+
+    // =========================================================================
+    // CANVA & STITCH ENHANCEMENTS: LIVE TICKER & RADAR CANVAS
+    // =========================================================================
+
+    function LiveTickerBanner() {
+      return (
+        <div className="ticker-wrap">
+          <div className="ticker-content">
+            <div className="ticker-item">
+              <span className="pulse-dot"></span>
+              <span><strong>LIVE JOB:</strong> Ramesh K. (Master Electrician) dispatched to Hauz Khas • ₹450 (90% direct payout)</span>
+            </div>
+            <div className="ticker-item">
+              <span>🏛️</span>
+              <span><strong>COOPERATIVE UPDATE:</strong> South Delhi Labour Cooperative Society added 42 certified plumbers</span>
+            </div>
+            <div className="ticker-item">
+              <span>🛡️</span>
+              <span><strong>SOCIAL SECURITY:</strong> ₹2,00,000 PM Suraksha Bima active for 13,910 registered artisans</span>
+            </div>
+            <div className="ticker-item">
+              <span>💰</span>
+              <span><strong>FAIR WAGE IMPACT:</strong> ₹1.84 Crore disbursed with 0% private intermediary commission cuts</span>
+            </div>
+            <div className="ticker-item">
+              <span>⭐</span>
+              <span><strong>HIGH RATING:</strong> Sunita Devi (Senior Caregiver) received 5.0★ rating in Defence Colony</span>
+            </div>
+            <div className="ticker-item">
+              <span className="pulse-dot"></span>
+              <span><strong>LIVE JOB:</strong> Gurpreet S. accepted urgent pipe leak fix in Greater Kailash • ETA 14 Mins</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function CooperativeRadarCanvas() {
+      const canvasRef = React.useRef(null);
+
+      React.useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let animationFrameId;
+
+        const width = 500;
+        const height = 400;
+        canvas.width = width * (window.devicePixelRatio || 1);
+        canvas.height = height * (window.devicePixelRatio || 1);
+        ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+
+        const centerX = width / 2;
+        const centerY = height / 2;
+
+        const nodes = [
+          { name: 'Ramesh K.', role: '⚡ Electrician', dist: '1.2 km', x: centerX - 130, y: centerY - 65, color: '#F59E0B' },
+          { name: 'Sunita D.', role: '🩺 Caregiver', dist: '1.8 km', x: centerX + 120, y: centerY - 70, color: '#10B981' },
+          { name: 'Gurpreet S.', role: '🚰 Plumber', dist: '2.4 km', x: centerX + 130, y: centerY + 75, color: '#38BDF8' },
+          { name: 'Mohd. Imran', role: '🪚 Carpenter', dist: '3.1 km', x: centerX - 120, y: centerY + 80, color: '#EC4899' },
+          { name: 'Asha R.', role: '🍲 Housekeeper', dist: '0.9 km', x: centerX - 25, y: centerY - 125, color: '#A855F7' }
+        ];
+
+        let angle = 0;
+        let packetT = 0;
+
+        const render = () => {
+          ctx.clearRect(0, 0, width, height);
+
+          // Radar Rings
+          const maxR = 170;
+          for (let r = 45; r <= maxR; r += 40) {
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, r, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.14)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([3, 5]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+          }
+
+          // Radar Sweep Gradient
+          angle += 0.022;
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(centerX, centerY);
+          ctx.arc(centerX, centerY, maxR, angle, angle + 0.38);
+          ctx.closePath();
+          const sweepGrad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxR);
+          sweepGrad.addColorStop(0, 'rgba(16, 185, 129, 0.35)');
+          sweepGrad.addColorStop(1, 'rgba(16, 185, 129, 0)');
+          ctx.fillStyle = sweepGrad;
+          ctx.fill();
+          ctx.restore();
+
+          // Connective Lines & Dynamic Payout Packets
+          nodes.forEach((node, i) => {
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(node.x, node.y);
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.22)';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            const pProgress = (packetT + i * 0.2) % 1;
+            const px = centerX + (node.x - centerX) * pProgress;
+            const py = centerY + (node.y - centerY) * pProgress;
+            ctx.beginPath();
+            ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+            ctx.fillStyle = '#F59E0B';
+            ctx.shadowColor = '#F59E0B';
+            ctx.shadowBlur = 8;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          });
+
+          packetT += 0.007;
+
+          // Central Hub
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, 24, 0, Math.PI * 2);
+          const hubGrad = ctx.createLinearGradient(centerX - 24, centerY - 24, centerX + 24, centerY + 24);
+          hubGrad.addColorStop(0, '#0F2C59');
+          hubGrad.addColorStop(1, '#1E40AF');
+          ctx.fillStyle = hubGrad;
+          ctx.fill();
+          ctx.strokeStyle = '#F59E0B';
+          ctx.lineWidth = 3;
+          ctx.shadowColor = '#F59E0B';
+          ctx.shadowBlur = 12;
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = 'bold 12px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('सह', centerX, centerY);
+
+          // Worker Nodes
+          nodes.forEach(node => {
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, 16, 0, Math.PI * 2);
+            ctx.fillStyle = '#0F172A';
+            ctx.fill();
+            ctx.strokeStyle = node.color;
+            ctx.lineWidth = 2.5;
+            ctx.shadowColor = node.color;
+            ctx.shadowBlur = 8;
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            // Worker label badge
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            const textWidth = ctx.measureText(node.role).width;
+            ctx.fillRect(node.x - textWidth / 2 - 5, node.y + 14, textWidth + 10, 16);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+            ctx.strokeRect(node.x - textWidth / 2 - 5, node.y + 14, textWidth + 10, 16);
+
+            ctx.fillStyle = '#F8FAFC';
+            ctx.font = 'bold 9px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'alphabetic';
+            ctx.fillText(node.role, node.x, node.y + 26);
+          });
+
+          animationFrameId = requestAnimationFrame(render);
+        };
+
+        render();
+
+        return () => {
+          cancelAnimationFrame(animationFrameId);
+        };
+      }, []);
+
+      return (
+        <div className="canvas-interactive-wrapper">
+          <div className="canvas-header-bar">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+              <span className="pulse-dot"></span>
+              <span style={{ color: '#F8FAFC', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '0.04em' }}>
+                LIVE GPS COOPERATIVE RADAR
+              </span>
+            </div>
+            <span style={{ color: '#38BDF8', fontSize: '0.75rem', fontWeight: 700, background: 'rgba(56, 189, 248, 0.12)', padding: '2px 8px', borderRadius: '10px' }}>
+              📡 Scanning 5km Radius
+            </span>
+          </div>
+
+          <div style={{ position: 'relative', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <canvas ref={canvasRef} style={{ width: '100%', height: '360px', display: 'block' }} />
+
+            {/* Floating Canva Stat Badges */}
+            <div className="floating-badge floating-badge-top">
+              <span style={{ fontSize: '1.3rem' }}>⚡</span>
+              <div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0F2C59' }}>12 Mins Avg Dispatch</div>
+                <div style={{ fontSize: '0.72rem', color: '#059669', fontWeight: 700 }}>180+ Standby Workers</div>
+              </div>
+            </div>
+
+            <div className="floating-badge floating-badge-bottom">
+              <span style={{ fontSize: '1.3rem' }}>🛡️</span>
+              <div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0F2C59' }}>₹2,00,000 Health Cover</div>
+                <div style={{ fontSize: '0.72rem', color: '#D97706', fontWeight: 700 }}>PM Suraksha Bima Yojana</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // =========================================================================
+    // HERO SECTION COMPONENT (CANVA & STITCH ENHANCED)
+    // =========================================================================
+
+    function HeroSection({ onExploreServices, onOpenCalculator, onSelectCategoryById }) {
+      const [inlineFare, setInlineFare] = useState(1200);
+
+      const workerDirectShare = Math.round(inlineFare * 0.90);
+      const societyShare = Math.round(inlineFare * 0.05);
+      const welfareFund = Math.round(inlineFare * 0.05);
+      const commercialAggregatorCut = Math.round(inlineFare * 0.30);
+      const workerSavings = workerDirectShare - Math.round(inlineFare * 0.70);
+
+      const quickNeeds = [
+        { label: '⚡ MCB Short Circuit', catId: 'electrical' },
+        { label: '🚰 Pipe Leak / Tank Overflow', catId: 'plumbing' },
+        { label: '🩺 Elderly Caregiver', catId: 'caregiver' },
+        { label: '🧹 Deep House Cleaning', catId: 'cleaning' },
+        { label: '🪚 Door Lock & Carpenter', catId: 'carpentry' },
+        { label: '🎨 Whitewash & Painting', catId: 'painting' },
+        { label: '🔧 AC / RO Repair', catId: 'technician' }
+      ];
+
+      return (
+        <>
+          <LiveTickerBanner />
+
+          <section className="hero-wrapper" style={{ position: 'relative', overflow: 'hidden' }}>
+            {/* Ambient Background Glowing Orbs (Canva Aesthetic) */}
+            <div className="canva-orb canva-orb-1"></div>
+            <div className="canva-orb canva-orb-2"></div>
+            <div className="canva-orb canva-orb-3"></div>
+
+            <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+              <div className="hero-grid">
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
+                    <span className="stitched-badge">
+                      <span>🏛️</span> Ministry of Cooperation • Govt of India
+                    </span>
+                    <span className="stitched-tag-gold">
+                      ⭐ SIH 2026 Problem ID: SIH26089
+                    </span>
+                  </div>
+
+                  <h1 className="hero-title">
+                    Verified Skilled Workers.<br />
+                    <span>Fair Wages. Trusted Household Services.</span>
+                  </h1>
+
+                  <p className="hero-desc">
+                    India’s 1st Cooperative-Owned Digital Service Marketplace. Connect directly with government-certified Labour Cooperative Societies for electricians, plumbers, caregivers, cleaners & technicians. <strong>90%+ of your booking payment</strong> goes straight to worker welfare & health insurance.
+                  </p>
+
+                  <div className="hero-cta-group">
+                    <button className="btn-primary" onClick={onExploreServices}>
+                      🔍 Find Certified Worker Near You 📍
+                    </button>
+                    <button className="btn-secondary" onClick={onOpenCalculator}>
+                      📊 Live Fair-Wage Calculator
+                    </button>
+                  </div>
+
+                  {/* Quick-Need Category Launcher */}
+                  <div style={{ marginTop: '1.75rem' }}>
+                    <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.6rem' }}>
+                      🔥 Instant Urgent Dispatch Categories:
+                    </div>
+                    <div className="quick-pills-bar">
+                      {quickNeeds.map(item => (
+                        <button
+                          key={item.catId}
+                          className="quick-pill"
+                          onClick={() => {
+                            if (onSelectCategoryById) {
+                              onSelectCategoryById(item.catId);
+                            } else {
+                              onExploreServices();
+                            }
+                          }}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '1rem', flexWrap: 'wrap' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <strong style={{ color: '#059669' }}>✓</strong> Police & Aadhaar Verified
+                    </span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <strong style={{ color: '#059669' }}>✓</strong> PM Suraksha Bima Enrolled
+                    </span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <strong style={{ color: '#059669' }}>✓</strong> 0% Commercial Intermediary Cut
+                    </span>
+                  </div>
+                </div>
+
+                {/* Right Column: Interactive HTML5 Canvas Radar */}
+                <div>
+                  <CooperativeRadarCanvas />
+                </div>
+              </div>
+
+              {/* Stitched 4-Pillar Trust Guarantee Ribbon */}
+              <div style={{ marginTop: '3.5rem' }}>
+                <div className="stitched-box">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.25rem', borderBottom: '1px dashed #A7F3D0', paddingBottom: '0.75rem' }}>
+                    <div>
+                      <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#065F46', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span>🌿 The Sahakar Cooperative Guarantee</span>
+                        <span style={{ background: '#D1FAE5', color: '#065F46', fontSize: '0.7rem', padding: '2px 8px', borderRadius: '10px' }}>Democratic Ownership</span>
+                      </h3>
+                      <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                        Replacing exploitative gig monopolies with democratic Labour Cooperative Societies.
+                      </p>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <span className="stitched-tag-gold">🏛️ 142 Affiliated Cooperatives</span>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
+                    <div style={{ background: '#F8FAFC', padding: '1rem', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>⚖️</div>
+                      <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0F2C59' }}>90% Direct Worker Share</h4>
+                      <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+                        Workers receive ₹90 of every ₹100 billed, credited directly to their verified bank accounts.
+                      </p>
+                    </div>
+
+                    <div style={{ background: '#F8FAFC', padding: '1rem', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>🛡️</div>
+                      <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#059669' }}>Built-in Health & Life Cover</h4>
+                      <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+                        5% auto-funded social welfare reserve guarantees PM Suraksha Bima accident & health coverage.
+                      </p>
+                    </div>
+
+                    <div style={{ background: '#F8FAFC', padding: '1rem', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>🏛️</div>
+                      <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#D97706' }}>Annual Society Dividend</h4>
+                      <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+                        5% surplus returned to registered Labour Cooperatives as patronage rebate & equipment funds.
+                      </p>
+                    </div>
+
+                    <div style={{ background: '#F8FAFC', padding: '1rem', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+                      <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>🚨</div>
+                      <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#DC2626' }}>15-Min Emergency SLA</h4>
+                      <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+                        Geo-targeted standby artisans on standby for short-circuit, pipe bursts & caregiver emergencies.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Canva-Style Bento Grid: Live Fair-Wage Slider & Social Security Preview */}
+              <div className="bento-grid">
+                {/* Bento 1 (Large): Interactive Fair Wage Simulator */}
+                <div className="bento-card bento-card-large" style={{ background: 'linear-gradient(135deg, #FFFFFF, #F8FAFC)', border: '2px solid #E2E8F0' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    <div>
+                      <div className="stitched-badge" style={{ marginBottom: '0.4rem' }}>
+                        Canva Interactive Model
+                      </div>
+                      <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#0F2C59' }}>
+                        Transparent Fare Distribution vs Commercial Aggregators
+                      </h3>
+                    </div>
+                    <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#059669' }}>
+                      ₹{inlineFare} Fare
+                    </div>
+                  </div>
+
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+                    Drag the slider to test how our cooperative architecture eliminates private venture profit cuts:
+                  </p>
+
+                  <input
+                    type="range"
+                    min="300"
+                    max="5000"
+                    step="100"
+                    value={inlineFare}
+                    onChange={(e) => setInlineFare(Number(e.target.value))}
+                    style={{ width: '100%', accentColor: 'var(--secondary)', marginBottom: '1.25rem' }}
+                  />
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
+                    <div style={{ background: '#ECFDF5', border: '1px solid #A7F3D0', padding: '1rem', borderRadius: '14px' }}>
+                      <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#065F46' }}>SAHAKAR WORKER SHARE (90%)</div>
+                      <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#059669', margin: '0.2rem 0' }}>₹{workerDirectShare}</div>
+                      <div style={{ fontSize: '0.72rem', color: '#047857' }}>+₹{workerSavings} more than private apps</div>
+                    </div>
+
+                    <div style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', padding: '1rem', borderRadius: '14px' }}>
+                      <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#1E40AF' }}>WELFARE & HEALTH FUND (5%)</div>
+                      <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#1E40AF', margin: '0.2rem 0' }}>₹{welfareFund}</div>
+                      <div style={{ fontSize: '0.72rem', color: '#1D4ED8' }}>PM Suraksha Bima Shield</div>
+                    </div>
+
+                    <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', padding: '1rem', borderRadius: '14px' }}>
+                      <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#991B1B' }}>PRIVATE APP COMMISSIONS (30%)</div>
+                      <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#DC2626', margin: '0.2rem 0' }}>₹{commercialAggregatorCut}</div>
+                      <div style={{ fontSize: '0.72rem', color: '#B91C1C' }}>Zero health benefits provided</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bento 2: Digital Cooperative ID Card Preview */}
+                <div className="bento-card" style={{ background: 'linear-gradient(135deg, #0F2C59, #1E3A8A)', color: 'white' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <span style={{ fontSize: '0.75rem', color: '#F59E0B', fontWeight: 800 }}>GOVT OF INDIA</span>
+                    <span style={{ background: 'rgba(255,255,255,0.15)', padding: '2px 8px', borderRadius: '8px', fontSize: '0.7rem' }}>VERIFIED</span>
+                  </div>
+
+                  <h4 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '0.5rem' }}>
+                    Official Digital Cooperative Worker Badge
+                  </h4>
+                  <p style={{ fontSize: '0.8rem', opacity: 0.85, marginBottom: '1.25rem' }}>
+                    Every worker carries an authenticated digital ID with QR verification, police clearance, and cooperative society membership.
+                  </p>
+
+                  <div style={{ background: 'rgba(255,255,255,0.1)', padding: '0.85rem', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#F59E0B', color: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '1.1rem' }}>
+                      ✓
+                    </div>
+                    <div>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 800 }}>Aadhaar Biometric Linked</div>
+                      <div style={{ fontSize: '0.72rem', opacity: 0.8 }}>100% Background Screened</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Statistics Ribbon */}
+              <div style={{ marginTop: '1rem' }}>
+                <div className="stats-card-grid">
+                  <div className="stat-item">
+                    <div className="stat-icon">👥</div>
+                    <div>
+                      <div className="stat-val">{FEDERATION_STATS.totalRegisteredWorkers.toLocaleString()}</div>
+                      <div className="stat-label">Verified Skilled Workers</div>
+                    </div>
+                  </div>
+
+                  <div className="stat-item">
+                    <div className="stat-icon">🏛️</div>
+                    <div>
+                      <div className="stat-val">{FEDERATION_STATS.activeSocieties}</div>
+                      <div className="stat-label">Cooperative Societies</div>
+                    </div>
+                  </div>
+
+                  <div className="stat-item">
+                    <div className="stat-icon">💰</div>
+                    <div>
+                      <div className="stat-val">{FEDERATION_STATS.fairWagePaid}</div>
+                      <div className="stat-label">Worker Wages Disbursed</div>
+                    </div>
+                  </div>
+
+                  <div className="stat-item">
+                    <div className="stat-icon">🛡️</div>
+                    <div>
+                      <div className="stat-val">{FEDERATION_STATS.welfareFundBalance}</div>
+                      <div className="stat-label">Social Welfare & Insurance</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </>
+      );
+    }
+
+    // =========================================================================
+    // SERVICE CATALOG COMPONENT
+    // =========================================================================
+
+    function ServiceCatalog({ onSelectCategory }) {
+      const [searchQuery, setSearchQuery] = useState('');
+      const [selectedFilter, setSelectedFilter] = useState('all');
+
+      const filteredServices = SERVICE_CATEGORIES.filter(service => {
+        const matchesSearch = service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                              service.desc.toLowerCase().includes(searchQuery.toLowerCase());
+        
+        if (selectedFilter === 'all') return matchesSearch;
+        if (selectedFilter === 'high') return matchesSearch && service.badge === 'High Demand';
+        if (selectedFilter === 'popular') return matchesSearch && (service.badge === 'Popular' || service.badge === 'Govt Approved');
+        return matchesSearch;
+      });
+
+      return (
+        <section id="services-catalog" className="section-wrapper container">
+          <div className="section-header">
+            <div style={{
+              color: 'var(--secondary)',
+              fontWeight: 800,
+              fontSize: '0.85rem',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              marginBottom: '0.5rem'
+            }}>
+              Direct Cooperative Marketplace
+            </div>
+            <h2 className="section-title">Explore Verified Services</h2>
+            <p className="section-subtitle">
+              Select a category to view nearby certified workers from registered Labour Cooperative Societies.
+            </p>
+          </div>
+
+          <div className="search-filter-bar">
+            <div className="search-input-group">
+              <span style={{ fontSize: '1.2rem' }}>🔍</span>
+              <input
+                type="text"
+                placeholder="Search electrician, plumbing, caregiver, painter, driver..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              {searchQuery && (
+                <button 
+                  onClick={() => setSearchQuery('')} 
+                  style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--text-muted)' }}
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button className={`role-btn ${selectedFilter === 'all' ? 'active' : ''}`} onClick={() => setSelectedFilter('all')}>All Services</button>
+              <button className={`role-btn ${selectedFilter === 'popular' ? 'active' : ''}`} onClick={() => setSelectedFilter('popular')}>Popular</button>
+              <button className={`role-btn ${selectedFilter === 'high' ? 'active' : ''}`} onClick={() => setSelectedFilter('high')}>High Demand</button>
+            </div>
+          </div>
+
+          <div className="services-grid">
+            {filteredServices.map((service) => (
+              <div key={service.id} className="service-card">
+                <div>
+                  <div className="service-card-top">
+                    <div className="service-icon-box">
+                      {getCategoryEmoji(service.id)}
+                    </div>
+                    <span className="badge-tag">{service.badge}</span>
+                  </div>
+
+                  <h3 className="service-name">{service.name}</h3>
+                  <p className="service-desc">{service.desc}</p>
+                </div>
+
+                <div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--secondary)', fontWeight: 700, marginBottom: '0.75rem' }}>
+                    👥 {service.workersAvailable} Verified Workers Nearby
+                  </div>
+
+                  <div className="service-meta">
+                    <div className="price-text">
+                      ₹{service.basePrice} <span>/ starting fare</span>
+                    </div>
+
+                    <button 
+                      className="btn-primary"
+                      style={{ padding: '8px 16px', fontSize: '0.875rem' }}
+                      onClick={() => onSelectCategory(service)}
+                    >
+                      Match Worker 📍
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {filteredServices.length === 0 && (
+            <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+              No services match your search term "{searchQuery}". Try searching for 'electrician' or 'caregiver'.
+            </div>
+          )}
+        </section>
+      );
+    }
+
+    // =========================================================================
+    // GEO MATCHING MODAL COMPONENT
+    // =========================================================================
+
+    function GeoMatchingModal({ selectedCategory, onClose, onSelectWorker }) {
+      const [selectedWorkerId, setSelectedWorkerId] = useState(SAMPLE_WORKERS[0].id);
+      const [bookingType, setBookingType] = useState('instant');
+      const [selectedDate, setSelectedDate] = useState('2026-09-04');
+      const [selectedTime, setSelectedTime] = useState('10:00 AM');
+      const [customerAddress, setCustomerAddress] = useState('B-42, Gulmohar Park, New Delhi');
+
+      const categoryWorkers = SAMPLE_WORKERS.filter(w => w.categoryId === selectedCategory?.id);
+      const availableWorkers = categoryWorkers.length > 0 ? categoryWorkers : SAMPLE_WORKERS;
+      const activeWorker = availableWorkers.find(w => w.id === selectedWorkerId) || availableWorkers[0];
+
+      const handleProceedToCheckout = () => {
+        onSelectWorker({
+          worker: activeWorker,
+          category: selectedCategory,
+          bookingType,
+          date: selectedDate,
+          time: selectedTime,
+          address: customerAddress
+        });
+      };
+
+      return (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <div className="modal-title">
+                <span>📍 Geo-Location Worker Match</span>
+                <span style={{ fontSize: '0.85rem', background: '#ECFDF5', color: '#047857', padding: '2px 10px', borderRadius: '12px' }}>
+                  {selectedCategory?.name || 'Household Service'}
+                </span>
+              </div>
+              <button className="modal-close" onClick={onClose}>✕</button>
+            </div>
+
+            <div className="modal-body">
+              <div className="map-simulation-box">
+                <div className="map-radar-circle"></div>
+                <div className="user-location-pin" title="Your Location"></div>
+
+                {availableWorkers.map((worker, idx) => {
+                  const offsets = [
+                    { top: '30%', left: '25%' },
+                    { top: '65%', left: '70%' },
+                    { top: '20%', left: '60%' },
+                    { top: '75%', left: '30%' },
+                    { top: '45%', left: '80%' }
+                  ];
+                  const pos = offsets[idx % offsets.length];
+
+                  return (
+                    <div
+                      key={worker.id}
+                      className="worker-node-pin"
+                      style={{
+                        ...pos,
+                        borderColor: worker.id === selectedWorkerId ? '#F59E0B' : '#10B981'
+                      }}
+                      onClick={() => setSelectedWorkerId(worker.id)}
+                      title={`${worker.name} (${worker.distanceKm} km away)`}
+                    >
+                      <img src={worker.photo} alt={worker.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                  );
+                })}
+
+                <div style={{
+                  position: 'absolute',
+                  bottom: '10px',
+                  left: '15px',
+                  background: 'rgba(15, 23, 42, 0.85)',
+                  color: 'white',
+                  fontSize: '0.75rem',
+                  padding: '4px 10px',
+                  borderRadius: '6px'
+                }}>
+                  📡 Scanning GPS Radius (5km): Found {availableWorkers.length} Certified Cooperative Workers
+                </div>
+              </div>
+
+              <div style={{ marginBottom: '1.25rem' }}>
+                <label style={{ fontSize: '0.85rem', fontWeight: 700, display: 'block', marginBottom: '0.4rem' }}>
+                  Service Location / Household Address
+                </label>
+                <input
+                  type="text"
+                  style={{
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '8px',
+                    border: '1px solid var(--card-border)',
+                    background: 'var(--card-bg)',
+                    fontFamily: 'inherit',
+                    fontSize: '0.9rem'
+                  }}
+                  value={customerAddress}
+                  onChange={(e) => setCustomerAddress(e.target.value)}
+                />
+              </div>
+
+              <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
+                <button
+                  style={{
+                    flex: 1,
+                    padding: '10px',
+                    borderRadius: '8px',
+                    border: bookingType === 'instant' ? '2px solid var(--secondary)' : '1px solid var(--card-border)',
+                    background: bookingType === 'instant' ? 'var(--secondary-glow)' : 'transparent',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    fontFamily: 'inherit'
+                  }}
+                  onClick={() => setBookingType('instant')}
+                >
+                  ⚡ Instant Dispatch (30 Mins)
+                </button>
+
+                <button
+                  style={{
+                    flex: 1,
+                    padding: '10px',
+                    borderRadius: '8px',
+                    border: bookingType === 'scheduled' ? '2px solid var(--primary)' : '1px solid var(--card-border)',
+                    background: bookingType === 'scheduled' ? 'var(--primary-glow)' : 'transparent',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    fontFamily: 'inherit'
+                  }}
+                  onClick={() => setBookingType('scheduled')}
+                >
+                  📅 Schedule Date & Time
+                </button>
+              </div>
+
+              {bookingType === 'scheduled' && (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+                  <div>
+                    <label style={{ fontSize: '0.8rem', fontWeight: 600 }}>Select Date</label>
+                    <input type="date" style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid var(--card-border)', fontFamily: 'inherit' }} value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: '0.8rem', fontWeight: 600 }}>Select Time Slot</label>
+                    <select style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid var(--card-border)', fontFamily: 'inherit' }} value={selectedTime} onChange={(e) => setSelectedTime(e.target.value)}>
+                      <option>09:00 AM - 11:00 AM</option>
+                      <option>10:00 AM - 12:00 PM</option>
+                      <option>02:00 PM - 04:00 PM</option>
+                      <option>05:00 PM - 07:00 PM</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              <h4 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '0.75rem' }}>
+                Select Nearby Cooperative Worker
+              </h4>
+
+              {availableWorkers.map((worker) => (
+                <div
+                  key={worker.id}
+                  className={`worker-card-selectable ${worker.id === selectedWorkerId ? 'selected' : ''}`}
+                  onClick={() => setSelectedWorkerId(worker.id)}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <img src={worker.photo} alt={worker.name} className="worker-avatar" />
+                    <div>
+                      <div className="worker-details">
+                        <h4>
+                          {worker.name}
+                          <span className="verified-badge-pill">✓ Govt Verified</span>
+                        </h4>
+                      </div>
+                      <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                        🏛️ {worker.society}
+                      </div>
+                      <div style={{ fontSize: '0.8rem', display: 'flex', gap: '1rem', marginTop: '0.25rem' }}>
+                        <span>⭐ {worker.rating} ({worker.reviewsCount} reviews)</span>
+                        <span>📍 {worker.distanceKm} km away</span>
+                        <span style={{ color: '#059669', fontWeight: 700 }}>🛡️ PM Bima Covered</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--primary)' }}>
+                      ₹{worker.hourlyRate}
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>per service visit</div>
+                  </div>
+                </div>
+              ))}
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2rem' }}>
+                <div>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Selected Worker:</span>
+                  <div style={{ fontWeight: 800, color: 'var(--text-main)' }}>{activeWorker.name}</div>
+                </div>
+
+                <button className="btn-primary" onClick={handleProceedToCheckout}>
+                  Proceed to Transparent Checkout 💳
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // =========================================================================
+    // BOOKING CHECKOUT MODAL COMPONENT
+    // =========================================================================
+
+    function BookingCheckoutModal({ bookingDetails, onClose, onCompleteBooking }) {
+      const [paymentMethod, setPaymentMethod] = useState('upi');
+      const [isProcessing, setIsProcessing] = useState(false);
+      const [bookingConfirmed, setBookingConfirmed] = useState(false);
+      const [generatedInvoice, setGeneratedInvoice] = useState(null);
+
+      const worker = bookingDetails.worker;
+      const category = bookingDetails.category;
+      
+      const baseFare = worker.hourlyRate || category.basePrice || 350;
+      const platformGst = Math.round(baseFare * 0.05);
+      const totalAmount = baseFare + platformGst;
+
+      const workerPayout = Math.round(baseFare * 0.90);
+      const societyDividend = Math.round(baseFare * 0.05);
+      const welfareContribution = Math.round(baseFare * 0.05);
+
+      const handlePayAndConfirm = () => {
+        setIsProcessing(true);
+        setTimeout(() => {
+          setIsProcessing(false);
+          setBookingConfirmed(true);
+          const invoice = {
+            invoiceNo: `INV-SAHAKAR-${Math.floor(100000 + Math.random() * 900000)}`,
+            bookingId: `BK-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+            date: new Date().toLocaleDateString('en-IN'),
+            serviceName: category?.name || 'Household Service',
+            workerName: worker.name,
+            societyName: worker.society,
+            societyRegNo: worker.societyRegNo,
+            address: bookingDetails.address,
+            totalAmount,
+            workerPayout,
+            societyDividend,
+            welfareContribution,
+            paymentMethod: paymentMethod.toUpperCase(),
+            otp: Math.floor(1000 + Math.random() * 9000).toString()
+          };
+          setGeneratedInvoice(invoice);
+          onCompleteBooking(invoice);
+        }, 1500);
+      };
+
+      return (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ maxWidth: '650px' }}>
+            <div className="modal-header">
+              <div className="modal-title"><span>💳 Transparent Invoice & Payment</span></div>
+              <button className="modal-close" onClick={onClose}>✕</button>
+            </div>
+
+            <div className="modal-body">
+              {!bookingConfirmed ? (
+                <>
+                  <div style={{
+                    background: 'var(--primary-glow)',
+                    padding: '1.25rem',
+                    borderRadius: '12px',
+                    marginBottom: '1.5rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1rem'
+                  }}>
+                    <img src={worker.photo} alt={worker.name} className="worker-avatar" />
+                    <div>
+                      <h4 style={{ fontSize: '1.1rem', fontWeight: 800 }}>{category?.name || 'Service Booking'}</h4>
+                      <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                        Assigned Worker: <strong>{worker.name}</strong> ({worker.experience} exp)
+                      </div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--secondary)', fontWeight: 700 }}>
+                        🏛️ {worker.society}
+                      </div>
+                    </div>
+                  </div>
+
+                  <h4 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '0.5rem' }}>Itemized Price Breakdown</h4>
+
+                  <div className="invoice-breakdown-box">
+                    <div className="invoice-row"><span>Base Service Fare</span><span>₹{baseFare}</span></div>
+                    <div className="invoice-row"><span>Government GST (5%)</span><span>₹{platformGst}</span></div>
+                    <div className="invoice-row total"><span>Total Amount Payable</span><span>₹{totalAmount}</span></div>
+
+                    <div className="coop-split-badge">
+                      <div style={{ fontWeight: 800, marginBottom: '0.25rem', display: 'flex', justifyContent: 'space-between' }}>
+                        <span>🌱 Sahakar Fair-Wage Split Guarantee:</span>
+                        <span>100% Transparent</span>
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.5rem', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                        <div><strong>Worker Payout (90%)</strong><br />₹{workerPayout} direct</div>
+                        <div><strong>Society Share (5%)</strong><br />₹{societyDividend} dividend</div>
+                        <div><strong>Welfare Fund (5%)</strong><br />₹{welfareContribution} insurance</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <h4 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '0.75rem' }}>Select Payment Mode</h4>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                    {['upi', 'card', 'netbanking'].map(method => (
+                      <button
+                        key={method}
+                        style={{
+                          padding: '12px',
+                          borderRadius: '8px',
+                          border: paymentMethod === method ? '2px solid var(--secondary)' : '1px solid var(--card-border)',
+                          background: paymentMethod === method ? 'var(--secondary-glow)' : 'transparent',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          fontFamily: 'inherit'
+                        }}
+                        onClick={() => setPaymentMethod(method)}
+                      >
+                        {method === 'upi' ? '📱 UPI / QR Code' : method === 'card' ? '💳 Debit / Credit Card' : '🏦 NetBanking'}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button
+                    className="btn-primary"
+                    style={{ width: '100%', justifyContent: 'center', padding: '14px' }}
+                    onClick={handlePayAndConfirm}
+                    disabled={isProcessing}
+                  >
+                    {isProcessing ? '🔄 Authorizing Digital Escrow Payment...' : `Pay ₹${totalAmount} & Confirm Booking`}
+                  </button>
+                </>
+              ) : (
+                <div style={{ textAlign: 'center', padding: '1rem 0' }}>
+                  <div style={{
+                    width: '64px',
+                    height: '64px',
+                    borderRadius: '50%',
+                    background: '#ECFDF5',
+                    color: '#059669',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '2rem',
+                    margin: '0 auto 1rem auto'
+                  }}>
+                    ✓
+                  </div>
+
+                  <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem', color: '#059669' }}>
+                    Booking Confirmed & Worker Dispatched!
+                  </h3>
+
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
+                    Share Job Start Verification OTP <strong>{generatedInvoice?.otp}</strong> with worker upon arrival.
+                  </p>
+
+                  <div style={{
+                    border: '2px dashed var(--primary)',
+                    background: '#F8FAFC',
+                    borderRadius: '12px',
+                    padding: '1.5rem',
+                    textAlign: 'left',
+                    marginBottom: '1.5rem'
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #E2E8F0', paddingBottom: '0.75rem', marginBottom: '0.75rem' }}>
+                      <div>
+                        <h5 style={{ fontWeight: 800, color: 'var(--primary)' }}>MINISTRY OF COOPERATION</h5>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Official Digital Invoice • {generatedInvoice?.invoiceNo}</span>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>Date: {generatedInvoice?.date}</span>
+                      </div>
+                    </div>
+
+                    <div style={{ fontSize: '0.85rem', marginBottom: '0.5rem' }}>
+                      <strong>Service:</strong> {generatedInvoice?.serviceName}<br />
+                      <strong>Cooperative Worker:</strong> {generatedInvoice?.workerName}<br />
+                      <strong>Affiliated Society:</strong> {generatedInvoice?.societyName} ({generatedInvoice?.societyRegNo})<br />
+                      <strong>Service Location:</strong> {generatedInvoice?.address}
+                    </div>
+
+                    <div style={{ background: '#ECFDF5', padding: '0.5rem 0.75rem', borderRadius: '6px', fontSize: '0.8rem', color: '#065F46', marginTop: '0.5rem' }}>
+                      Direct Worker Payout: ₹{generatedInvoice?.workerPayout} | Society Fund: ₹{generatedInvoice?.societyDividend} | Welfare & Insurance Pool: ₹{generatedInvoice?.welfareContribution}
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                    <button className="btn-secondary" onClick={() => window.print()}>🖨️ Download / Print Official Invoice</button>
+                    <button className="btn-primary" onClick={onClose}>Done & Close</button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // =========================================================================
+    // WORKER DASHBOARD COMPONENT
+    // =========================================================================
+
+    function WorkerDashboard() {
+      const [workerState] = useState(SAMPLE_WORKERS[0]);
+      const [standbyActive, setStandbyActive] = useState(true);
+      const [activeTab, setActiveTab] = useState('jobs');
+
+      const [jobRequests, setJobRequests] = useState([
+        {
+          id: 'REQ-501',
+          serviceName: 'Emergency Electrical MCB Trip Fix',
+          customerName: 'Anil Agarwal',
+          address: 'C-14, Hauz Khas Enclave, New Delhi',
+          distance: '1.4 km away',
+          estimatedPayout: '₹450',
+          timeSlot: 'Immediate (Instant SOS)',
+          status: 'Pending'
+        },
+        {
+          id: 'REQ-502',
+          serviceName: 'Complete House Wiring Audit',
+          customerName: 'Meenakshi Sundaram',
+          address: 'Flat 402, Safdarjung Enclave, New Delhi',
+          distance: '2.1 km away',
+          estimatedPayout: '₹850',
+          timeSlot: 'Tomorrow, 11:00 AM',
+          status: 'Pending'
+        }
+      ]);
+
+      const handleAcceptJob = (reqId) => {
+        setJobRequests(prev => prev.map(job => job.id === reqId ? { ...job, status: 'Accepted' } : job));
+      };
+
+      const handleDeclineJob = (reqId) => {
+        setJobRequests(prev => prev.filter(job => job.id !== reqId));
+      };
+
+      return (
+        <div className="container section-wrapper">
+          <div className="welfare-card">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                <img src={workerState.photo} alt={workerState.name} className="worker-avatar" style={{ width: '80px', height: '80px', border: '3px solid #F59E0B' }} />
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <h2 style={{ fontSize: '1.6rem', fontWeight: 800 }}>{workerState.name}</h2>
+                    <span className="verified-badge-pill">✓ Govt Certified</span>
+                  </div>
+                  <p style={{ opacity: 0.9, fontSize: '0.9rem' }}>
+                    {workerState.role} • <strong>{workerState.society}</strong> ({workerState.societyRegNo})
+                  </p>
+                  <div style={{ fontSize: '0.8rem', opacity: 0.8, marginTop: '0.25rem' }}>
+                    ⭐ {workerState.rating} Rating • {workerState.completedJobs} Jobs Completed • {workerState.experience} Experience
+                  </div>
+                </div>
+              </div>
+
+              <div style={{
+                background: 'rgba(255, 255, 255, 0.12)',
+                padding: '1rem',
+                borderRadius: '12px',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.2)'
+              }}>
+                <div style={{ fontSize: '0.8rem', opacity: 0.9, fontWeight: 700, marginBottom: '0.5rem' }}>
+                  🚨 Emergency Standby Status:
+                </div>
+                <button
+                  style={{
+                    background: standbyActive ? '#10B981' : '#64748B',
+                    color: 'white',
+                    border: 'none',
+                    padding: '8px 16px',
+                    borderRadius: '20px',
+                    fontWeight: 700,
+                    fontSize: '0.85rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}
+                  onClick={() => setStandbyActive(!standbyActive)}
+                >
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'white' }}></span>
+                  {standbyActive ? 'Active on Emergency Radar' : 'Offline'}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '2rem', borderBottom: '1px solid var(--card-border)', paddingBottom: '0.75rem', flexWrap: 'wrap' }}>
+            <button className={`role-btn ${activeTab === 'jobs' ? 'active' : ''}`} onClick={() => setActiveTab('jobs')}>📥 Live Job Requests ({jobRequests.length})</button>
+            <button className={`role-btn ${activeTab === 'earnings' ? 'active' : ''}`} onClick={() => setActiveTab('earnings')}>💰 Transparent Earnings & Dividend</button>
+            <button className={`role-btn ${activeTab === 'welfare' ? 'active' : ''}`} onClick={() => setActiveTab('welfare')}>🛡️ Social Security & Health Insurance</button>
+            <button className={`role-btn ${activeTab === 'idcard' ? 'active' : ''}`} onClick={() => setActiveTab('idcard')}>🪪 Digital Cooperative ID Card</button>
+          </div>
+
+          {activeTab === 'jobs' && (
+            <div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '1rem' }}>Incoming Service Calls Near You</h3>
+              {jobRequests.map((req) => (
+                <div key={req.id} style={{
+                  background: 'var(--card-bg)',
+                  border: '1px solid var(--card-border)',
+                  borderRadius: '16px',
+                  padding: '1.5rem',
+                  marginBottom: '1rem',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  boxShadow: 'var(--shadow-sm)',
+                  flexWrap: 'wrap',
+                  gap: '1rem'
+                }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
+                      <span style={{ background: '#FEF3C7', color: '#D97706', padding: '2px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 800 }}>{req.timeSlot}</span>
+                      <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>📍 {req.distance}</span>
+                    </div>
+                    <h4 style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0.2rem 0' }}>{req.serviceName}</h4>
+                    <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Customer: <strong>{req.customerName}</strong> | {req.address}</p>
+                  </div>
+
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--secondary)' }}>
+                      {req.estimatedPayout} <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>(Direct Worker Share)</span>
+                    </div>
+                    {req.status === 'Pending' ? (
+                      <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem' }}>
+                        <button className="btn-primary" style={{ padding: '8px 16px', fontSize: '0.85rem' }} onClick={() => handleAcceptJob(req.id)}>Accept Job ✓</button>
+                        <button className="btn-secondary" style={{ padding: '8px 14px', fontSize: '0.85rem', color: '#DC2626' }} onClick={() => handleDeclineJob(req.id)}>Decline</button>
+                      </div>
+                    ) : (
+                      <div style={{ background: '#ECFDF5', color: '#047857', padding: '6px 14px', borderRadius: '8px', fontWeight: 800, fontSize: '0.85rem', marginTop: '0.5rem' }}>✓ Job Accepted • En Route</div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {activeTab === 'earnings' && (
+            <div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+                <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '16px', padding: '1.5rem' }}>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>This Month Direct Earnings</div>
+                  <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--primary)', margin: '0.5rem 0' }}>₹38,450</div>
+                  <div style={{ fontSize: '0.75rem', color: '#059669', fontWeight: 700 }}>+18% vs private platform average</div>
+                </div>
+                <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '16px', padding: '1.5rem' }}>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>Accumulated Society Dividend</div>
+                  <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--secondary)', margin: '0.5rem 0' }}>₹4,200</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Annual patronage rebate share</div>
+                </div>
+                <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '16px', padding: '1.5rem' }}>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>Welfare & Insurance Contribution</div>
+                  <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--accent)', margin: '0.5rem 0' }}>₹2,150</div>
+                  <div style={{ fontSize: '0.75rem', color: '#059669', fontWeight: 700 }}>Auto-funded via 5% client contribution</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'welfare' && (
+            <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '16px', padding: '2rem' }}>
+              <h3 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '1rem' }}>Integrated Social Security & Health Shield</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                <div style={{ border: '1px solid #A7F3D0', background: '#ECFDF5', padding: '1.25rem', borderRadius: '12px' }}>
+                  <h4 style={{ color: '#065F46', fontWeight: 800 }}>🛡️ PM Suraksha Bima Yojana (Accident Cover)</h4>
+                  <p style={{ fontSize: '0.85rem', color: '#047857', margin: '0.5rem 0' }}>Coverage: <strong>₹2,00,000</strong> | Status: <span style={{ fontWeight: 800 }}>ACTIVE</span></p>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.8 }}>Policy #: PM-Suraksha-Bima #8839201</div>
+                </div>
+                <div style={{ border: '1px solid #BFDBFE', background: '#EFF6FF', padding: '1.25rem', borderRadius: '12px' }}>
+                  <h4 style={{ color: '#1E40AF', fontWeight: 800 }}>🩺 Sahakar Medical Health Insurance</h4>
+                  <p style={{ fontSize: '0.85rem', color: '#1E3A8A', margin: '0.5rem 0' }}>Coverage: <strong>₹5,00,000 Cashless Hospitalization</strong></p>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.8 }}>Cooperative Mutual Fund #DL-90214</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'idcard' && (
+            <div style={{ maxWidth: '480px', margin: '0 auto' }}>
+              <div style={{
+                background: 'linear-gradient(135deg, #0F2C59, #1E3A8A)',
+                color: 'white',
+                borderRadius: '20px',
+                padding: '2rem',
+                boxShadow: 'var(--shadow-lg)',
+                border: '3px solid #F59E0B'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255, 255, 255, 0.2)', paddingBottom: '1rem', marginBottom: '1rem' }}>
+                  <div>
+                    <h4 style={{ fontSize: '0.9rem', color: '#F59E0B', fontWeight: 800 }}>MINISTRY OF COOPERATION</h4>
+                    <div style={{ fontSize: '0.75rem', opacity: 0.8 }}>Labour Cooperative Official Worker ID</div>
+                  </div>
+                  <div style={{ fontSize: '1.2rem', fontWeight: 900 }}>सहकार</div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
+                  <img src={workerState.photo} alt={workerState.name} style={{ width: '90px', height: '90px', borderRadius: '12px', objectFit: 'cover', border: '2px solid white' }} />
+                  <div style={{ fontSize: '0.85rem' }}>
+                    <h3 style={{ fontSize: '1.2rem', fontWeight: 800 }}>{workerState.name}</h3>
+                    <div>Skill: <strong>{workerState.role}</strong></div>
+                    <div>Society: <strong>{workerState.society}</strong></div>
+                    <div>Reg No: <strong>{workerState.societyRegNo}</strong></div>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px dashed rgba(255, 255, 255, 0.2)' }}>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.8 }}>
+                    ✓ Police Verified<br />
+                    ✓ Aadhaar Biometric Authenticated
+                  </div>
+                  <div style={{ background: 'white', color: 'black', padding: '6px', borderRadius: '6px', fontSize: '0.65rem', fontWeight: 800, textAlign: 'center' }}>
+                    [QR CODE VERIFY]
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // =========================================================================
+    // ADMIN DASHBOARD COMPONENT
+    // =========================================================================
+
+    function AdminDashboard() {
+      const [verifications, setVerifications] = useState(PENDING_VERIFICATIONS);
+      const [activeTab, setActiveTab] = useState('verification');
+
+      const handleApproveWorker = (id) => {
+        setVerifications(prev => prev.filter(v => v.id !== id));
+        alert('Worker application approved! Digital Certificate & Cooperative Badge issued.');
+      };
+
+      const handleRejectWorker = (id) => {
+        setVerifications(prev => prev.filter(v => v.id !== id));
+      };
+
+      return (
+        <div className="container section-wrapper">
+          <div style={{
+            background: 'linear-gradient(135deg, #0F2C59, #1E293B)',
+            color: 'white',
+            borderRadius: '20px',
+            padding: '2rem',
+            marginBottom: '2rem',
+            boxShadow: 'var(--shadow-md)'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+              <div>
+                <div style={{ color: '#F59E0B', fontWeight: 800, fontSize: '0.85rem', textTransform: 'uppercase' }}>
+                  Ministry of Cooperation • State Federation Governance Panel
+                </div>
+                <h2 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Labour Cooperative Federation Dashboard</h2>
+                <p style={{ opacity: 0.8, fontSize: '0.95rem', marginTop: '0.25rem' }}>
+                  Monitoring worker verification, society registrations, fair-wage compliance, and social security funds.
+                </p>
+              </div>
+              <div style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '12px 20px', borderRadius: '12px', textAlign: 'right' }}>
+                <div style={{ fontSize: '0.8rem', opacity: 0.8 }}>Active Federation Region</div>
+                <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#10B981' }}>Delhi NCR Sector #04</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="stats-card-grid" style={{ marginBottom: '2.5rem' }}>
+            <div className="stat-item"><div className="stat-icon">👥</div><div><div className="stat-val">{FEDERATION_STATS.totalRegisteredWorkers.toLocaleString()}</div><div className="stat-label">Total Verified Workers</div></div></div>
+            <div className="stat-item"><div className="stat-icon">🏛️</div><div><div className="stat-val">{FEDERATION_STATS.activeSocieties}</div><div className="stat-label">Affiliated Societies</div></div></div>
+            <div className="stat-item"><div className="stat-icon">📜</div><div><div className="stat-val">{verifications.length}</div><div className="stat-label">Pending Verification Queue</div></div></div>
+            <div className="stat-item"><div className="stat-icon">🛡️</div><div><div className="stat-val">{FEDERATION_STATS.welfareFundBalance}</div><div className="stat-label">Accumulated Welfare Pool</div></div></div>
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '2rem', borderBottom: '1px solid var(--card-border)', paddingBottom: '0.75rem', flexWrap: 'wrap' }}>
+            <button className={`role-btn ${activeTab === 'verification' ? 'active' : ''}`} onClick={() => setActiveTab('verification')}>🔍 Worker Verification Queue ({verifications.length})</button>
+            <button className={`role-btn ${activeTab === 'societies' ? 'active' : ''}`} onClick={() => setActiveTab('societies')}>🏛️ Registered Cooperative Societies</button>
+            <button className={`role-btn ${activeTab === 'welfare' ? 'active' : ''}`} onClick={() => setActiveTab('welfare')}>📊 Fair-Wage & Welfare Governance Metrics</button>
+          </div>
+
+          {activeTab === 'verification' && (
+            <div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '1rem' }}>Worker Certification & Background Review Pipeline</h3>
+              {verifications.map((item) => (
+                <div key={item.id} style={{
+                  background: 'var(--card-bg)',
+                  border: '1px solid var(--card-border)',
+                  borderRadius: '16px',
+                  padding: '1.5rem',
+                  marginBottom: '1rem',
+                  boxShadow: 'var(--shadow-sm)'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.4rem' }}>
+                        <h4 style={{ fontSize: '1.15rem', fontWeight: 800 }}>{item.name}</h4>
+                        <span style={{ background: '#FEF3C7', color: '#D97706', padding: '2px 10px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 800 }}>{item.status}</span>
+                      </div>
+                      <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                        Skill: <strong>{item.role}</strong> | Society: <strong>{item.society}</strong>
+                      </div>
+                      <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.85rem', marginTop: '0.75rem', flexWrap: 'wrap' }}>
+                        <span style={{ color: item.aadharVerified ? '#059669' : '#DC2626', fontWeight: 700 }}>✓ Aadhaar Biometric Linked</span>
+                        <span style={{ textDecoration: 'underline', color: 'var(--primary)', cursor: 'pointer' }}>📄 {item.policeVerificationDoc}</span>
+                        <span style={{ textDecoration: 'underline', color: 'var(--primary)', cursor: 'pointer' }}>🎓 {item.skillCertificateDoc}</span>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.75rem' }}>
+                      <button className="btn-primary" style={{ padding: '10px 20px', fontSize: '0.875rem' }} onClick={() => handleApproveWorker(item.id)}>Approve & Issue ID ✓</button>
+                      <button className="btn-secondary" style={{ padding: '10px 16px', fontSize: '0.875rem', color: '#DC2626' }} onClick={() => handleRejectWorker(item.id)}>Reject Application</button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {verifications.length === 0 && (
+                <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>✓ All pending worker applications have been processed and verified!</div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'societies' && (
+            <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '16px', padding: '2rem', overflowX: 'auto' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '1rem' }}>Affiliated Labour Cooperative Societies Directory</h3>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
+                <thead>
+                  <tr style={{ borderBottom: '2px solid var(--card-border)', color: 'var(--text-muted)' }}>
+                    <th style={{ padding: '10px' }}>Society Name</th>
+                    <th style={{ padding: '10px' }}>Reg Number</th>
+                    <th style={{ padding: '10px' }}>Workers Enrolled</th>
+                    <th style={{ padding: '10px' }}>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ borderBottom: '1px solid var(--card-border)' }}>
+                    <td style={{ padding: '12px 10px', fontWeight: 700 }}>South Delhi Labour Cooperative Federation #402</td>
+                    <td style={{ padding: '12px 10px' }}>ND-LAB-2018-992</td>
+                    <td style={{ padding: '12px 10px', fontWeight: 700 }}>1,240 Workers</td>
+                    <td style={{ padding: '12px 10px', color: '#059669', fontWeight: 800 }}>✓ Verified Active</td>
+                  </tr>
+                  <tr style={{ borderBottom: '1px solid var(--card-border)' }}>
+                    <td style={{ padding: '12px 10px', fontWeight: 700 }}>Mahila Utthan Sahakari Samiti #108</td>
+                    <td style={{ padding: '12px 10px' }}>DL-WOM-2020-112</td>
+                    <td style={{ padding: '12px 10px', fontWeight: 700 }}>890 Workers</td>
+                    <td style={{ padding: '12px 10px', color: '#059669', fontWeight: 800 }}>✓ Verified Active</td>
+                  </tr>
+                  <tr>
+                    <td style={{ padding: '12px 10px', fontWeight: 700 }}>Capital Labour Construction & Maintenance Society</td>
+                    <td style={{ padding: '12px 10px' }}>DL-LAB-2016-044</td>
+                    <td style={{ padding: '12px 10px', fontWeight: 700 }}>2,150 Workers</td>
+                    <td style={{ padding: '12px 10px', color: '#059669', fontWeight: 800 }}>✓ Verified Active</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {activeTab === 'welfare' && (
+            <div style={{ background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '16px', padding: '2rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '1rem' }}>Fair-Wage Enforcement & Anti-Exploitation Compliance</h3>
+              <div style={{ background: '#ECFDF5', border: '1px solid #A7F3D0', padding: '1.5rem', borderRadius: '12px', color: '#065F46' }}>
+                <h4 style={{ fontWeight: 800, marginBottom: '0.5rem' }}>✓ Zero Intermediary Commission Standard</h4>
+                <p style={{ fontSize: '0.9rem' }}>
+                  Unlike commercial gig aggregators charging 25%-35% commission with zero health benefits, Sahakar Gig Platform enforces a maximum 5% platform operations fee, disbursing 90% directly to worker bank accounts and reserving 5% for social welfare & medical insurance.
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // =========================================================================
+    // EMERGENCY SOS MODAL COMPONENT
+    // =========================================================================
+
+    function EmergencySOSModal({ onClose, onConfirmSOS }) {
+      const [selectedEmergency, setSelectedEmergency] = useState('electrical');
+      const [sosActive, setSosActive] = useState(false);
+      const [dispatchedWorker, setDispatchedWorker] = useState(null);
+
+      const emergencyTypes = [
+        { id: 'electrical', title: '⚡ Electrical Short Circuit / MCB Fire Hazard', sla: '15 Mins Guaranteed Dispatch', desc: 'Immediate power cut-off, burning smell, sparks in panel box' },
+        { id: 'plumbing', title: '🚰 Water Pipe Burst / Flooding Crisis', sla: '20 Mins Dispatch', desc: 'Overhead tank leakage, main inlet line burst' },
+        { id: 'caregiver', title: '🩺 Elderly Caregiver Urgent Emergency', sla: '15 Mins Dispatch', desc: 'Patient mobility crisis, vital monitoring support' },
+        { id: 'lockout', title: '🔑 Home Lockout / Broken Key Locksmith', sla: '25 Mins Dispatch', desc: 'Door lock jammed or key snapped inside latch' }
+      ];
+
+      const handleTriggerSOS = () => {
+        setSosActive(true);
+        setTimeout(() => {
+          setDispatchedWorker({
+            name: 'Ramesh Kumar Verma',
+            role: 'Certified Emergency Responder',
+            society: 'South Delhi Labour Cooperative Federation #402',
+            phone: '+91 98765 43210',
+            etaMinutes: 12,
+            photo: 'https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=150&auto=format&fit=crop&q=80'
+          });
+          onConfirmSOS();
+        }, 2000);
+      };
+
+      return (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ maxWidth: '600px', border: '3px solid #DC2626' }}>
+            <div className="modal-header" style={{ background: '#FEF2F2', borderBottom: '1px solid #FCA5A5' }}>
+              <div className="modal-title" style={{ color: '#991B1B' }}><span>🚨 1-Click SOS Emergency Service Booking</span></div>
+              <button className="modal-close" onClick={onClose}>✕</button>
+            </div>
+
+            <div className="modal-body">
+              {!sosActive ? (
+                <>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
+                    Broadcast urgent crisis to nearest standby certified cooperative workers with 15-minute response guarantee.
+                  </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
+                    {emergencyTypes.map((item) => (
+                      <div
+                        key={item.id}
+                        style={{
+                          padding: '1.25rem',
+                          borderRadius: '12px',
+                          border: selectedEmergency === item.id ? '2px solid #DC2626' : '1px solid var(--card-border)',
+                          background: selectedEmergency === item.id ? '#FEF2F2' : 'var(--card-bg)',
+                          cursor: 'pointer',
+                          transition: 'var(--transition)'
+                        }}
+                        onClick={() => setSelectedEmergency(item.id)}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
+                          <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: selectedEmergency === item.id ? '#991B1B' : 'var(--text-main)' }}>{item.title}</h4>
+                          <span style={{ background: '#DC2626', color: 'white', padding: '2px 8px', borderRadius: '12px', fontSize: '0.7rem', fontWeight: 800 }}>{item.sla}</span>
+                        </div>
+                        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{item.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <button className="sos-trigger-btn" style={{ width: '100%', justifyContent: 'center', padding: '16px', fontSize: '1.1rem' }} onClick={handleTriggerSOS}>
+                    BROADCAST URGENT SOS DISPATCH NOW 🚨
+                  </button>
+                </>
+              ) : !dispatchedWorker ? (
+                <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
+                  <div className="map-radar-circle" style={{ margin: '0 auto 1.5rem auto', borderColor: '#DC2626' }}></div>
+                  <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#991B1B', marginBottom: '0.5rem' }}>📡 Broadcasting Emergency SOS Signal...</h3>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Matching nearby verified standby workers within 3 km radius...</p>
+                </div>
+              ) : (
+                <div style={{ textAlign: 'center', padding: '1rem 0' }}>
+                  <div style={{ background: '#FEF2F2', border: '2px solid #FCA5A5', borderRadius: '16px', padding: '1.5rem', marginBottom: '1.5rem' }}>
+                    <span style={{ background: '#DC2626', color: 'white', padding: '4px 12px', borderRadius: '12px', fontSize: '0.8rem', fontWeight: 800 }}>🚨 EMERGENCY RESPONDER EN ROUTE</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '1.25rem', textAlign: 'left' }}>
+                      <img src={dispatchedWorker.photo} alt={dispatchedWorker.name} className="worker-avatar" style={{ width: '70px', height: '70px', border: '3px solid #DC2626' }} />
+                      <div>
+                        <h4 style={{ fontSize: '1.2rem', fontWeight: 800 }}>{dispatchedWorker.name}</h4>
+                        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{dispatchedWorker.role}</p>
+                        <p style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: 700 }}>🏛️ {dispatchedWorker.society}</p>
+                      </div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px dashed #FCA5A5' }}>
+                      <div><span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Estimated Arrival</span><div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#991B1B' }}>⏱️ {dispatchedWorker.etaMinutes} Mins</div></div>
+                      <div><span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Emergency Helpline</span><div style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--primary)' }}>📞 {dispatchedWorker.phone}</div></div>
+                    </div>
+                  </div>
+                  <button className="btn-primary" onClick={onClose} style={{ width: '100%', justifyContent: 'center' }}>Track Live GPS Location</button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // =========================================================================
+    // FAIR WAGE CALCULATOR COMPONENT
+    // =========================================================================
+
+    function FairWageCalculator({ onClose }) {
+      const [bookingAmount, setBookingAmount] = useState(1000);
+
+      const privateCommission = Math.round(bookingAmount * 0.30);
+      const privateWorkerWage = Math.round(bookingAmount * 0.70);
+      const sahakarWorkerWage = Math.round(bookingAmount * 0.90);
+      const sahakarSocietyDividend = Math.round(bookingAmount * 0.05);
+      const sahakarWelfarePool = Math.round(bookingAmount * 0.05);
+      const wageDifference = sahakarWorkerWage - privateWorkerWage;
+
+      return (
+        <div className="modal-overlay">
+          <div className="modal-content" style={{ maxWidth: '750px' }}>
+            <div className="modal-header">
+              <div className="modal-title"><span>📊 Fair-Wage & Welfare Impact Visualizer</span></div>
+              <button className="modal-close" onClick={onClose}>✕</button>
+            </div>
+
+            <div className="modal-body">
+              <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+                <label style={{ fontSize: '0.95rem', fontWeight: 800, display: 'block', marginBottom: '0.5rem' }}>
+                  Select Sample Customer Service Booking Fare: <strong>₹{bookingAmount}</strong>
+                </label>
+                <input type="range" min="300" max="5000" step="100" value={bookingAmount} onChange={(e) => setBookingAmount(Number(e.target.value))} style={{ width: '100%', accentColor: 'var(--secondary)' }} />
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                  <span>₹300 (Basic Repair)</span>
+                  <span>₹2,500 (Full House Paint/Care)</span>
+                  <span>₹5,000 (Major Overhaul)</span>
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+                <div style={{ background: '#FEF2F2', border: '2px solid #FCA5A5', borderRadius: '16px', padding: '1.5rem' }}>
+                  <div style={{ background: '#DC2626', color: 'white', padding: '4px 10px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 800, display: 'inline-block', marginBottom: '0.75rem' }}>Private Aggregator Model</div>
+                  <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#991B1B', marginBottom: '0.75rem' }}>Commercial Intermediary</h4>
+                  <div style={{ fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Worker Direct Take-Home:</span><strong style={{ color: '#DC2626' }}>₹{privateWorkerWage} (70%)</strong></div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Platform Commission Cut:</span><strong>₹{privateCommission} (30%)</strong></div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Worker Health Insurance:</span><strong style={{ color: '#DC2626' }}>₹0 (Nil)</strong></div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Society Dividend Share:</span><strong>₹0 (Corporate Profit)</strong></div>
+                  </div>
+                </div>
+
+                <div style={{ background: '#ECFDF5', border: '2px solid #6EE7B7', borderRadius: '16px', padding: '1.5rem' }}>
+                  <div style={{ background: '#059669', color: 'white', padding: '4px 10px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 800, display: 'inline-block', marginBottom: '0.75rem' }}>Sahakar Cooperative Model</div>
+                  <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#065F46', marginBottom: '0.75rem' }}>Cooperative-Owned Platform</h4>
+                  <div style={{ fontSize: '0.9rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Worker Direct Take-Home:</span><strong style={{ color: '#059669' }}>₹{sahakarWorkerWage} (90%)</strong></div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Cooperative Society Dividend:</span><strong>₹{sahakarSocietyDividend} (5%)</strong></div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Health & Welfare Fund:</span><strong style={{ color: '#059669' }}>₹{sahakarWelfarePool} (5%)</strong></div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Private Intermediary Cut:</span><strong style={{ color: '#059669' }}>₹0 (Zero Cut)</strong></div>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{
+                background: 'var(--primary-glow)',
+                border: '1px solid var(--primary-light)',
+                padding: '1.25rem',
+                borderRadius: '12px',
+                textAlign: 'center'
+              }}>
+                <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--primary)', marginBottom: '0.4rem' }}>💡 Social Impact Summary</h4>
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-main)' }}>
+                  By choosing the Sahakar Cooperative platform, the skilled worker earns <strong>₹{wageDifference} MORE</strong> on this single job, while auto-accumulating <strong>₹{sahakarWelfarePool}</strong> for PM Bima health insurance coverage.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // =========================================================================
+    // FOOTER COMPONENT
+    // =========================================================================
+
+    function Footer() {
+      return (
+        <footer className="footer-wrapper">
+          <div className="container">
+            <div className="footer-grid">
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+                  <div className="emblem-badge" style={{ width: '40px', height: '40px', fontSize: '1rem' }}>सह</div>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'white' }}>सहकार GIG PLATFORM</h3>
+                </div>
+                <p style={{ fontSize: '0.9rem', color: '#94A3B8', maxWidth: '360px', marginBottom: '1.25rem' }}>
+                  A Cooperative-Owned Digital Service Marketplace enabling Labour Cooperative Federations to connect verified skilled workers with households & institutions.
+                </p>
+                <div style={{ fontSize: '0.8rem', color: '#F59E0B', fontWeight: 700 }}>
+                  Smart India Hackathon (SIH) 2026 • Problem Statement SIH26089
+                </div>
+              </div>
+
+              <div className="footer-col">
+                <h4>Cooperative Ecosystem</h4>
+                <ul>
+                  <li><a href="#services-catalog">Electricians & Wiring</a></li>
+                  <li><a href="#services-catalog">Sanitation & Plumbing</a></li>
+                  <li><a href="#services-catalog">Elderly Care & Nursing</a></li>
+                  <li><a href="#services-catalog">Painters & Woodwork</a></li>
+                  <li><a href="#services-catalog">Appliance Technicians</a></li>
+                </ul>
+              </div>
+
+              <div className="footer-col">
+                <h4>Government Portals</h4>
+                <ul>
+                  <li><a href="https://cooperation.gov.in" target="_blank" rel="noreferrer">Ministry of Cooperation</a></li>
+                  <li><a href="https://sih.gov.in" target="_blank" rel="noreferrer">Smart India Hackathon 2026</a></li>
+                  <li><a href="https://ncui.coop" target="_blank" rel="noreferrer">National Cooperative Union of India</a></li>
+                  <li><a href="https://ncdc.in" target="_blank" rel="noreferrer">NCDC Sahakar Portal</a></li>
+                </ul>
+              </div>
+
+              <div className="footer-col">
+                <h4>Worker Welfare & Support</h4>
+                <div style={{ background: 'rgba(255, 255, 255, 0.08)', padding: '1rem', borderRadius: '12px', fontSize: '0.85rem' }}>
+                  <div style={{ fontWeight: 800, color: '#10B981', marginBottom: '0.25rem' }}>📞 Worker Helpline: 1800-11-SAHAKAR</div>
+                  <div style={{ color: '#94A3B8', fontSize: '0.75rem' }}>24x7 Toll Free Support for Worker Onboarding, Insurance Claims & Emergency SOS.</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="footer-bottom">
+              <div>© 2026 Ministry of Cooperation, Govt of India. Developed for Smart India Hackathon 2026.</div>
+              <div style={{ display: 'flex', gap: '1.5rem' }}>
+                <span>Privacy Policy</span>
+                <span>Terms of Cooperative Service</span>
+                <span>Fair Wage Guidelines</span>
+              </div>
+            </div>
+          </div>
+        </footer>
+      );
+    }
+
+    // =========================================================================
+    // MAIN APP COMPONENT
+    // =========================================================================
+
+    function App() {
+      const [activeRole, setActiveRole] = useState('customer');
+      const [userBookings, setUserBookings] = useState(INITIAL_BOOKINGS);
+
+      const [selectedCategory, setSelectedCategory] = useState(null);
+      const [geoMatchingOpen, setGeoMatchingOpen] = useState(false);
+      
+      const [pendingBookingDetails, setPendingBookingDetails] = useState(null);
+      const [checkoutModalOpen, setCheckoutModalOpen] = useState(false);
+      
+      const [sosModalOpen, setSosModalOpen] = useState(false);
+      const [calculatorOpen, setCalculatorOpen] = useState(false);
+
+      const handleSelectCategory = (category) => {
+        setSelectedCategory(category);
+        setGeoMatchingOpen(true);
+      };
+
+      const handleSelectWorker = (bookingPayload) => {
+        setGeoMatchingOpen(false);
+        setPendingBookingDetails(bookingPayload);
+        setCheckoutModalOpen(true);
+      };
+
+      const handleCompleteBooking = (invoice) => {
+        const newBooking = {
+          id: invoice.bookingId,
+          serviceName: invoice.serviceName,
+          workerName: invoice.workerName,
+          workerRole: 'Cooperative Specialist',
+          society: invoice.societyName,
+          date: invoice.date,
+          time: 'Instant / Scheduled',
+          status: 'Confirmed',
+          address: invoice.address,
+          totalAmount: invoice.totalAmount,
+          workerPayout: invoice.workerPayout,
+          societyDividend: invoice.societyDividend,
+          welfareContribution: invoice.welfareContribution,
+          paymentStatus: `Paid via ${invoice.paymentMethod}`,
+          otp: invoice.otp
+        };
+        setUserBookings([newBooking, ...userBookings]);
+      };
+
+      return (
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+          <Header
+            activeRole={activeRole}
+            setActiveRole={setActiveRole}
+            onOpenSOS={() => setSosModalOpen(true)}
+            bookingCount={userBookings.length}
+          />
+
+          <main style={{ flex: 1 }}>
+            {activeRole === 'customer' && (
+              <>
+                <HeroSection
+                  onExploreServices={() => {
+                    const catalogEl = document.getElementById('services-catalog');
+                    if (catalogEl) catalogEl.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  onOpenCalculator={() => setCalculatorOpen(true)}
+                  onSelectCategoryById={(catId) => {
+                    const foundCat = SERVICE_CATEGORIES.find(c => c.id === catId);
+                    if (foundCat) handleSelectCategory(foundCat);
+                  }}
+                />
+
+                {userBookings.length > 0 && (
+                  <div className="container" style={{ margin: '1.5rem auto 0 auto' }}>
+                    <div style={{
+                      background: 'var(--card-bg)',
+                      border: '2px solid var(--secondary)',
+                      borderRadius: '16px',
+                      padding: '1.25rem 1.75rem',
+                      boxShadow: 'var(--shadow-md)'
+                    }}>
+                      <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '0.75rem', color: 'var(--secondary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span>📋 Your Active Cooperative Bookings ({userBookings.length})</span>
+                      </h3>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
+                        {userBookings.map((b) => (
+                          <div key={b.id} style={{ background: '#F8FAFC', border: '1px solid var(--card-border)', borderRadius: '12px', padding: '1rem' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
+                              <strong style={{ fontSize: '0.95rem' }}>{b.serviceName}</strong>
+                              <span style={{ background: '#D1FAE5', color: '#065F46', padding: '2px 8px', borderRadius: '10px', fontSize: '0.75rem', fontWeight: 800 }}>{b.status}</span>
+                            </div>
+                            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                              Worker: <strong>{b.workerName}</strong> | 🏛️ {b.society}
+                            </div>
+                            <div style={{ fontSize: '0.8rem', marginTop: '0.4rem', color: 'var(--primary)', fontWeight: 700 }}>
+                              🔑 Job OTP: <span style={{ background: '#FEF3C7', padding: '2px 6px', borderRadius: '4px' }}>{b.otp}</span> | Paid ₹{b.totalAmount}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <ServiceCatalog onSelectCategory={handleSelectCategory} />
+              </>
+            )}
+
+            {activeRole === 'worker' && <WorkerDashboard />}
+            {activeRole === 'admin' && <AdminDashboard />}
+          </main>
+
+          {geoMatchingOpen && (
+            <GeoMatchingModal
+              selectedCategory={selectedCategory}
+              onClose={() => setGeoMatchingOpen(false)}
+              onSelectWorker={handleSelectWorker}
+            />
+          )}
+
+          {checkoutModalOpen && pendingBookingDetails && (
+            <BookingCheckoutModal
+              bookingDetails={pendingBookingDetails}
+              onClose={() => setCheckoutModalOpen(false)}
+              onCompleteBooking={handleCompleteBooking}
+            />
+          )}
+
+          {sosModalOpen && (
+            <EmergencySOSModal
+              onClose={() => setSosModalOpen(false)}
+              onConfirmSOS={() => {}}
+            />
+          )}
+
+          {calculatorOpen && (
+            <FairWageCalculator onClose={() => setCalculatorOpen(false)} />
+          )}
+
+          <Footer />
+        </div>
+      );
+    }
+
+    // =========================================================================
+    // RENDER
+    // =========================================================================
+
+    const rootElement = document.getElementById('root');
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(<App />);
+  </script>
+</body>
+</html>
