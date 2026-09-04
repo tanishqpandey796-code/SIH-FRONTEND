@@ -1,6 +1,7 @@
 // Main Application Container - Sahakar Gig Platform (SIH26089)
 const { useState } = React;
 import Header from './components/Header.js';
+import LoginPage from './components/LoginPage.js';
 import HeroSection from './components/HeroSection.js';
 import ServiceCatalog from './components/ServiceCatalog.js';
 import GeoMatchingModal from './components/GeoMatchingModal.js';
@@ -13,8 +14,29 @@ import Footer from './components/Footer.js';
 import { INITIAL_BOOKINGS } from './mockData.js';
 
 export default function App() {
-  const [activeRole, setActiveRole] = useState('customer'); // 'customer' | 'worker' | 'admin'
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [activeRole, setActiveRole] = useState('customer'); // 'customer' | 'admin'
   const [userBookings, setUserBookings] = useState(INITIAL_BOOKINGS);
+
+  // Auth Handlers
+  const handleLogin = (user, role = 'customer') => {
+    setCurrentUser(user);
+    setActiveRole(role);
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setCurrentUser(null);
+  };
+
+  const handleEmergencyDirect = (serviceName) => {
+    setCurrentUser({ name: 'Emergency Citizen', role: 'customer' });
+    setActiveRole('customer');
+    setIsLoggedIn(true);
+    setSosModalOpen(true);
+  };
 
   // Modal Control States
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -62,6 +84,15 @@ export default function App() {
     setUserBookings([newBooking, ...userBookings]);
   };
 
+  if (!isLoggedIn) {
+    return (
+      <LoginPage 
+        onLogin={handleLogin} 
+        onEmergencyDirect={handleEmergencyDirect} 
+      />
+    );
+  }
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header
@@ -69,6 +100,8 @@ export default function App() {
         setActiveRole={setActiveRole}
         onOpenSOS={() => setSosModalOpen(true)}
         bookingCount={userBookings.length}
+        currentUser={currentUser}
+        onLogout={handleLogout}
       />
 
       <main style={{ flex: 1 }}>

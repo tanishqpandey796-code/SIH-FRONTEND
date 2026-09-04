@@ -1,7 +1,7 @@
 // Header Component - Sahakar Gig Platform (SIH26089)
 // Header uses global React from CDN
 
-export default function Header({ activeRole, setActiveRole, onOpenSOS, bookingCount }) {
+export default function Header({ activeRole, setActiveRole, onOpenSOS, bookingCount, currentUser, onLogout }) {
   return (
     <header className="header-wrapper">
       {/* Government & SIH Announcement Bar */}
@@ -33,7 +33,7 @@ export default function Header({ activeRole, setActiveRole, onOpenSOS, bookingCo
                 borderRadius: '12px', 
                 fontSize: '0.7rem',
                 border: '1px solid #A7F3D0'
-              }}>Verified Cooperative</span>
+              }}>VERIFIED COOPERATIVE</span>
             </h1>
             <span>Cooperative Household & Community Services Portal</span>
           </div>
@@ -55,8 +55,8 @@ export default function Header({ activeRole, setActiveRole, onOpenSOS, bookingCo
           </button>
         </div>
 
-        {/* Actions & Emergency SOS */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        {/* Actions & Emergency SOS & User Profile */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           {activeRole === 'customer' && (
             <button className="sos-trigger-btn" onClick={onOpenSOS}>
               🚨 1-Click SOS Booking
@@ -75,10 +75,47 @@ export default function Header({ activeRole, setActiveRole, onOpenSOS, bookingCo
               alignItems: 'center',
               gap: '0.4rem'
             }}>
-              <span>📋 Active Bookings:</span>
+              <span>📋 Active:</span>
               <span style={{ background: '#F59E0B', color: '#000', padding: '2px 8px', borderRadius: '10px' }}>
                 {bookingCount}
               </span>
+            </div>
+          )}
+
+          {/* Logged in user profile & Logout */}
+          {currentUser && (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              background: '#F1F5F9',
+              padding: '4px 8px 4px 12px',
+              borderRadius: '24px',
+              border: '1px solid #CBD5E1'
+            }}>
+              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0F2C59' }}>
+                {currentUser.name || 'Cooperative Member'}
+              </span>
+              <button
+                onClick={onLogout}
+                title="Logout / Switch Portal"
+                style={{
+                  background: '#EF4444',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '16px',
+                  padding: '4px 10px',
+                  fontSize: '0.75rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '2px'
+                }}
+              >
+                <span>Logout</span>
+                <span>🚪</span>
+              </button>
             </div>
           )}
         </div>
