@@ -2,7 +2,7 @@
 const { useState } = React;
 import { SAMPLE_WORKERS } from '../mockData.js';
 
-export default function WorkerDashboard() {
+export default function WorkerDashboard({ isEmbedded = false } = {}) {
   const [workerState, setWorkerState] = useState(SAMPLE_WORKERS[0]);
   const [standbyActive, setStandbyActive] = useState(true);
   const [activeTab, setActiveTab] = useState('jobs'); // 'jobs' | 'earnings' | 'welfare' | 'idcard'
@@ -39,7 +39,7 @@ export default function WorkerDashboard() {
   };
 
   return (
-    <div className="container section-wrapper">
+    <div className={isEmbedded ? "" : "container section-wrapper"} style={isEmbedded ? { padding: '0.5rem 0' } : {}}>
       {/* Worker Top Profile Header */}
       <div className="welfare-card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>

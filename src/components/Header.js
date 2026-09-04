@@ -39,7 +39,7 @@ export default function Header({ activeRole, setActiveRole, onOpenSOS, bookingCo
           </div>
         </div>
 
-        {/* Multi-Role Switcher (Customer / Worker / Federation Admin) */}
+        {/* Multi-Role Switcher (Customer / Federation Admin) */}
         <div className="role-switcher">
           <button 
             className={`role-btn ${activeRole === 'customer' ? 'active' : ''}`}
@@ -48,13 +48,7 @@ export default function Header({ activeRole, setActiveRole, onOpenSOS, bookingCo
             🏠 Household Customer
           </button>
           <button 
-            className={`role-btn ${activeRole === 'worker' ? 'active' : ''}`}
-            onClick={() => setActiveRole('worker')}
-          >
-            🛠️ Sahakar Worker Workspace
-          </button>
-          <button 
-            className={`role-btn ${activeRole === 'admin' ? 'active' : ''}`}
+            className={`role-btn ${activeRole === 'admin' || activeRole === 'worker' ? 'active' : ''}`}
             onClick={() => setActiveRole('admin')}
           >
             🏛️ Federation Admin

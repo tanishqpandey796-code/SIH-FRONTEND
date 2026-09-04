@@ -1,10 +1,11 @@
 // AdminDashboard Component - Sahakar Gig Platform (SIH26089)
 const { useState } = React;
 import { PENDING_VERIFICATIONS, FEDERATION_STATS } from '../mockData.js';
+import WorkerDashboard from './WorkerDashboard.js';
 
-export default function AdminDashboard() {
+export default function AdminDashboard({ initialTab = 'verification' }) {
   const [verifications, setVerifications] = useState(PENDING_VERIFICATIONS);
-  const [activeTab, setActiveTab] = useState('verification'); // 'verification' | 'societies' | 'welfare'
+  const [activeTab, setActiveTab] = useState(initialTab); // 'verification' | 'societies' | 'welfare' | 'workspace'
 
   const handleApproveWorker = (id) => {
     setVerifications(prev => prev.filter(v => v.id !== id));
@@ -33,7 +34,7 @@ export default function AdminDashboard() {
             </div>
             <h2 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Labour Cooperative Federation Dashboard</h2>
             <p style={{ opacity: 0.8, fontSize: '0.95rem', marginTop: '0.25rem' }}>
-              Monitoring worker verification, society registrations, fair-wage compliance, and social security funds.
+              Monitoring worker verification, society registrations, fair-wage compliance, social security funds, and worker operations.
             </p>
           </div>
 
@@ -80,7 +81,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Admin Tabs */}
-      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '2rem', borderBottom: '1px solid var(--card-border)', paddingBottom: '0.75rem' }}>
+      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '2rem', borderBottom: '1px solid var(--card-border)', paddingBottom: '0.75rem', flexWrap: 'wrap' }}>
         <button 
           className={`role-btn ${activeTab === 'verification' ? 'active' : ''}`}
           onClick={() => setActiveTab('verification')}
@@ -98,6 +99,12 @@ export default function AdminDashboard() {
           onClick={() => setActiveTab('welfare')}
         >
           📊 Fair-Wage & Welfare Governance Metrics
+        </button>
+        <button 
+          className={`role-btn ${activeTab === 'workspace' ? 'active' : ''}`}
+          onClick={() => setActiveTab('workspace')}
+        >
+          🛠️ Sahakar Worker Workspace
         </button>
       </div>
 
@@ -216,6 +223,47 @@ export default function AdminDashboard() {
               Unlike commercial gig aggregators charging 25%-35% commission with zero health benefits, Sahakar Gig Platform enforces a maximum 5% platform operations fee, disbursing 90% directly to worker bank accounts and reserving 5% for social welfare & medical insurance.
             </p>
           </div>
+        </div>
+      )}
+
+      {/* Sahakar Worker Workspace Tab */}
+      {activeTab === 'workspace' && (
+        <div>
+          <div style={{
+            background: 'linear-gradient(135deg, #064E3B, #0F766E)',
+            color: 'white',
+            borderRadius: '16px',
+            padding: '1.25rem 1.75rem',
+            marginBottom: '1.5rem',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '1rem',
+            boxShadow: 'var(--shadow-sm)'
+          }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                <span style={{ background: '#34D399', color: '#064E3B', padding: '2px 8px', borderRadius: '10px', fontSize: '0.75rem', fontWeight: 800 }}>
+                  FEDERATION WORKER PORTAL
+                </span>
+                <span style={{ fontSize: '0.85rem', opacity: 0.9 }}>• Verified Member Operations</span>
+              </div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0 }}>
+                Sahakar Worker Operations & Job Dispatch Center
+              </h3>
+              <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem', opacity: 0.85 }}>
+                Real-time field worker interface: instant SOS job dispatch, hourly fair-wage earnings, digital ID badge, and welfare insurance coverage.
+              </p>
+            </div>
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <span style={{ background: 'rgba(255,255,255,0.2)', padding: '6px 14px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 700 }}>
+                🟢 Live Worker Simulator Active
+              </span>
+            </div>
+          </div>
+
+          <WorkerDashboard isEmbedded={true} />
         </div>
       )}
     </div>

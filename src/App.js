@@ -123,14 +123,9 @@ export default function App() {
           </>
         )}
 
-        {/* ROLE 2: COOPERATIVE WORKER WORKSPACE VIEW */}
-        {activeRole === 'worker' && (
-          <WorkerDashboard />
-        )}
-
-        {/* ROLE 3: FEDERATION ADMIN VIEW */}
-        {activeRole === 'admin' && (
-          <AdminDashboard />
+        {/* ROLE 2: FEDERATION ADMIN VIEW (INCLUDES WORKER WORKSPACE) */}
+        {(activeRole === 'admin' || activeRole === 'worker') && (
+          <AdminDashboard initialTab={activeRole === 'worker' ? 'workspace' : 'verification'} />
         )}
       </main>
 

@@ -433,13 +433,7 @@
                 🏠 Household Customer
               </button>
               <button 
-                className={`role-btn ${activeRole === 'worker' ? 'active' : ''}`}
-                onClick={() => setActiveRole('worker')}
-              >
-                🛠️ Sahakar Worker Workspace
-              </button>
-              <button 
-                className={`role-btn ${activeRole === 'admin' ? 'active' : ''}`}
+                className={`role-btn ${activeRole === 'admin' || activeRole === 'worker' ? 'active' : ''}`}
                 onClick={() => setActiveRole('admin')}
               >
                 🏛️ Federation Admin
@@ -1494,7 +1488,7 @@
     // WORKER DASHBOARD COMPONENT
     // =========================================================================
 
-    function WorkerDashboard() {
+    function WorkerDashboard({ isEmbedded = false } = {}) {
       const [workerState] = useState(SAMPLE_WORKERS[0]);
       const [standbyActive, setStandbyActive] = useState(true);
       const [activeTab, setActiveTab] = useState('jobs');
@@ -1531,7 +1525,7 @@
       };
 
       return (
-        <div className="container section-wrapper">
+        <div className={isEmbedded ? "" : "container section-wrapper"} style={isEmbedded ? { padding: '0.5rem 0' } : {}}>
           <div className="welfare-card">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
@@ -1722,9 +1716,9 @@
     // ADMIN DASHBOARD COMPONENT
     // =========================================================================
 
-    function AdminDashboard() {
+    function AdminDashboard({ initialTab = 'verification' } = {}) {
       const [verifications, setVerifications] = useState(PENDING_VERIFICATIONS);
-      const [activeTab, setActiveTab] = useState('verification');
+      const [activeTab, setActiveTab] = useState(initialTab);
 
       const handleApproveWorker = (id) => {
         setVerifications(prev => prev.filter(v => v.id !== id));
@@ -1752,7 +1746,7 @@
                 </div>
                 <h2 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Labour Cooperative Federation Dashboard</h2>
                 <p style={{ opacity: 0.8, fontSize: '0.95rem', marginTop: '0.25rem' }}>
-                  Monitoring worker verification, society registrations, fair-wage compliance, and social security funds.
+                  Monitoring worker verification, society registrations, fair-wage compliance, social security funds, and worker operations.
                 </p>
               </div>
               <div style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '12px 20px', borderRadius: '12px', textAlign: 'right' }}>
@@ -1773,6 +1767,7 @@
             <button className={`role-btn ${activeTab === 'verification' ? 'active' : ''}`} onClick={() => setActiveTab('verification')}>🔍 Worker Verification Queue ({verifications.length})</button>
             <button className={`role-btn ${activeTab === 'societies' ? 'active' : ''}`} onClick={() => setActiveTab('societies')}>🏛️ Registered Cooperative Societies</button>
             <button className={`role-btn ${activeTab === 'welfare' ? 'active' : ''}`} onClick={() => setActiveTab('welfare')}>📊 Fair-Wage & Welfare Governance Metrics</button>
+            <button className={`role-btn ${activeTab === 'workspace' ? 'active' : ''}`} onClick={() => setActiveTab('workspace')}>🛠️ Sahakar Worker Workspace</button>
           </div>
 
           {activeTab === 'verification' && (
@@ -1860,6 +1855,46 @@
                   Unlike commercial gig aggregators charging 25%-35% commission with zero health benefits, Sahakar Gig Platform enforces a maximum 5% platform operations fee, disbursing 90% directly to worker bank accounts and reserving 5% for social welfare & medical insurance.
                 </p>
               </div>
+            </div>
+          )}
+
+          {activeTab === 'workspace' && (
+            <div>
+              <div style={{
+                background: 'linear-gradient(135deg, #064E3B, #0F766E)',
+                color: 'white',
+                borderRadius: '16px',
+                padding: '1.25rem 1.75rem',
+                marginBottom: '1.5rem',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '1rem',
+                boxShadow: 'var(--shadow-sm)'
+              }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                    <span style={{ background: '#34D399', color: '#064E3B', padding: '2px 8px', borderRadius: '10px', fontSize: '0.75rem', fontWeight: 800 }}>
+                      FEDERATION WORKER PORTAL
+                    </span>
+                    <span style={{ fontSize: '0.85rem', opacity: 0.9 }}>• Verified Member Operations</span>
+                  </div>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 800, margin: 0 }}>
+                    Sahakar Worker Operations & Job Dispatch Center
+                  </h3>
+                  <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem', opacity: 0.85 }}>
+                    Real-time field worker interface: instant SOS job dispatch, hourly fair-wage earnings, digital ID badge, and welfare insurance coverage.
+                  </p>
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <span style={{ background: 'rgba(255,255,255,0.2)', padding: '6px 14px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 700 }}>
+                    🟢 Live Worker Simulator Active
+                  </span>
+                </div>
+              </div>
+
+              <WorkerDashboard isEmbedded={true} />
             </div>
           )}
         </div>
@@ -2221,8 +2256,9 @@
               </>
             )}
 
-            {activeRole === 'worker' && <WorkerDashboard />}
-            {activeRole === 'admin' && <AdminDashboard />}
+            {(activeRole === 'admin' || activeRole === 'worker') && (
+              <AdminDashboard initialTab={activeRole === 'worker' ? 'workspace' : 'verification'} />
+            )}
           </main>
 
           {geoMatchingOpen && (
