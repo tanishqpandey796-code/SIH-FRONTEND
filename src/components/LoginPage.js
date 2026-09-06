@@ -773,51 +773,13 @@ export default function LoginPage({ onLogin, onEmergencyDirect }) {
               ) : (
                 /* Customer Login View */
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.55rem' }}>
-                    <div>
-                      <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0F2C59', margin: 0 }}>
-                        Customer Login
-                      </h3>
-                      <p style={{ fontSize: '0.72rem', color: '#64748B', margin: '1px 0 0 0' }}>
-                        Book trusted home & community services
-                      </p>
-                    </div>
-
-                    {/* Method Switcher */}
-                    <div style={{ display: 'flex', gap: '2px', background: '#F8FAFC', padding: '2px', borderRadius: '6px', border: '1px solid #E2E8F0' }}>
-                      <button
-                        type="button"
-                        onClick={() => { setCustMethod('username'); setCustLoginError(''); }}
-                        style={{
-                          padding: '2px 7px',
-                          borderRadius: '4px',
-                          border: 'none',
-                          fontSize: '0.68rem',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          background: custMethod === 'username' ? '#1D4ED8' : 'transparent',
-                          color: custMethod === 'username' ? 'white' : '#64748B'
-                        }}
-                      >
-                        Password
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => { setCustMethod('otp'); setCustLoginError(''); }}
-                        style={{
-                          padding: '2px 7px',
-                          borderRadius: '4px',
-                          border: 'none',
-                          fontSize: '0.68rem',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          background: custMethod === 'otp' ? '#1D4ED8' : 'transparent',
-                          color: custMethod === 'otp' ? 'white' : '#64748B'
-                        }}
-                      >
-                        OTP
-                      </button>
-                    </div>
+                  <div style={{ marginBottom: '0.65rem' }}>
+                    <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0F2C59', margin: 0 }}>
+                      Customer Login
+                    </h3>
+                    <p style={{ fontSize: '0.72rem', color: '#64748B', margin: '1px 0 0 0' }}>
+                      Book trusted home & community services
+                    </p>
                   </div>
 
                   {custLoginError && (
@@ -835,197 +797,93 @@ export default function LoginPage({ onLogin, onEmergencyDirect }) {
                     </div>
                   )}
 
-                  {/* Customer Method Form */}
-                  {custMethod === 'username' ? (
-                    <form onSubmit={handleCustomerSubmit}>
-                      <div style={{ marginBottom: '0.4rem' }}>
-                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.15rem' }}>
-                          Username or Email
-                        </label>
+                  <form onSubmit={handleCustomerSubmit}>
+                    <div style={{ marginBottom: '0.4rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.15rem' }}>
+                        Username or Email
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Enter username or email"
+                        value={custUsername}
+                        onChange={(e) => setCustUsername(e.target.value)}
+                        style={{
+                          width: '100%',
+                          boxSizing: 'border-box',
+                          padding: '0.5rem 0.75rem',
+                          borderRadius: '8px',
+                          border: '1.5px solid #CBD5E1',
+                          fontSize: '0.82rem',
+                          outline: 'none'
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ marginBottom: '0.25rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.15rem' }}>
+                        Password
+                      </label>
+                      <div style={{ position: 'relative' }}>
                         <input
-                          type="text"
-                          placeholder="Enter username or email"
-                          value={custUsername}
-                          onChange={(e) => setCustUsername(e.target.value)}
+                          type={showCustPassword ? 'text' : 'password'}
+                          placeholder="Enter password"
+                          value={custPassword}
+                          onChange={(e) => setCustPassword(e.target.value)}
                           style={{
                             width: '100%',
                             boxSizing: 'border-box',
-                            padding: '0.5rem 0.75rem',
+                            padding: '0.5rem 2rem 0.5rem 0.75rem',
                             borderRadius: '8px',
                             border: '1.5px solid #CBD5E1',
                             fontSize: '0.82rem',
                             outline: 'none'
                           }}
                         />
+                        <button
+                          type="button"
+                          onClick={() => setShowCustPassword(!showCustPassword)}
+                          style={{
+                            position: 'absolute',
+                            right: '8px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: '0.75rem',
+                            opacity: 0.7
+                          }}
+                        >
+                          {showCustPassword ? '👁️' : '👁️‍🗨️'}
+                        </button>
                       </div>
-
-                      <div style={{ marginBottom: '0.25rem' }}>
-                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.15rem' }}>
-                          Password
-                        </label>
-                        <div style={{ position: 'relative' }}>
-                          <input
-                            type={showCustPassword ? 'text' : 'password'}
-                            placeholder="Enter password"
-                            value={custPassword}
-                            onChange={(e) => setCustPassword(e.target.value)}
-                            style={{
-                              width: '100%',
-                              boxSizing: 'border-box',
-                              padding: '0.5rem 2rem 0.5rem 0.75rem',
-                              borderRadius: '8px',
-                              border: '1.5px solid #CBD5E1',
-                              fontSize: '0.82rem',
-                              outline: 'none'
-                            }}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => setShowCustPassword(!showCustPassword)}
-                            style={{
-                              position: 'absolute',
-                              right: '8px',
-                              top: '50%',
-                              transform: 'translateY(-50%)',
-                              background: 'none',
-                              border: 'none',
-                              cursor: 'pointer',
-                              fontSize: '0.75rem',
-                              opacity: 0.7
-                            }}
-                          >
-                            {showCustPassword ? '👁️' : '👁️‍🗨️'}
-                          </button>
-                        </div>
-                      </div>
-
-                      <div style={{ textAlign: 'right', marginBottom: '0.4rem' }}>
-                        <a href="#forgot" onClick={(e) => { e.preventDefault(); alert('Password reset link sent to your registered email.'); }} style={{ fontSize: '0.7rem', color: '#1D4ED8', textDecoration: 'none', fontWeight: 600 }}>
-                          Forgot Password?
-                        </a>
-                      </div>
-
-                      <button
-                        type="submit"
-                        style={{
-                          width: '100%',
-                          padding: '0.6rem',
-                          background: 'linear-gradient(135deg, #1D4ED8, #2563EB)',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '8px',
-                          fontWeight: 800,
-                          fontSize: '0.82rem',
-                          cursor: 'pointer',
-                          boxShadow: '0 3px 8px rgba(29, 78, 216, 0.25)',
-                          marginBottom: '0.5rem'
-                        }}
-                      >
-                        Login as Customer →
-                      </button>
-                    </form>
-                  ) : (
-                    /* Mobile OTP Sub-form */
-                    <div>
-                      <div style={{ marginBottom: '0.4rem' }}>
-                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.15rem' }}>
-                          Mobile Number
-                        </label>
-                        <div style={{ display: 'flex', gap: '0.35rem' }}>
-                          <span style={{
-                            padding: '0.42rem 0.6rem',
-                            background: '#F1F5F9',
-                            border: '1.5px solid #CBD5E1',
-                            borderRadius: '8px',
-                            fontSize: '0.8rem',
-                            fontWeight: 700,
-                            color: '#475569',
-                            display: 'flex',
-                            alignItems: 'center',
-                            whiteSpace: 'nowrap',
-                            flexShrink: 0
-                          }}>+91</span>
-                          <input
-                            type="tel"
-                            placeholder="Enter 10-digit mobile number"
-                            maxLength="10"
-                            value={custMobile}
-                            onChange={(e) => setCustMobile(e.target.value.replace(/\D/g, ''))}
-                            style={{
-                              width: '100%',
-                              boxSizing: 'border-box',
-                              padding: '0.42rem 0.65rem',
-                              borderRadius: '8px',
-                              border: '1.5px solid #CBD5E1',
-                              fontSize: '0.82rem',
-                              outline: 'none'
-                            }}
-                          />
-                        </div>
-                      </div>
-
-                      {custOtpSent && (
-                        <div style={{ marginBottom: '0.45rem' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.15rem' }}>
-                            <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1E293B' }}>
-                              Enter OTP
-                            </label>
-                            <span style={{ fontSize: '0.68rem', color: '#059669', fontWeight: 700 }}>
-                              ✓ Demo OTP: 5291
-                            </span>
-                          </div>
-                          <input
-                            type="text"
-                            placeholder="4-digit code"
-                            maxLength="4"
-                            value={custOtp}
-                            onChange={(e) => setCustOtp(e.target.value)}
-                            style={{
-                              width: '100%',
-                              boxSizing: 'border-box',
-                              padding: '0.5rem 0.75rem',
-                              borderRadius: '8px',
-                              border: '1.5px solid #1D4ED8',
-                              fontSize: '0.82rem',
-                              outline: 'none',
-                              background: '#EFF6FF'
-                            }}
-                          />
-                        </div>
-                      )}
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (!custMobile || custMobile.length < 10) {
-                            alert('Please enter a valid 10-digit mobile number.');
-                            return;
-                          }
-                          if (!custOtpSent) {
-                            setCustOtpSent(true);
-                            alert('Demo OTP sent: 5291');
-                          } else {
-                            onLogin({ name: `Resident (${custMobile})`, phone: custMobile, role: 'customer' }, 'customer');
-                          }
-                        }}
-                        style={{
-                          width: '100%',
-                          padding: '0.6rem',
-                          background: 'linear-gradient(135deg, #1D4ED8, #2563EB)',
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '8px',
-                          fontWeight: 700,
-                          fontSize: '0.82rem',
-                          cursor: 'pointer',
-                          boxShadow: '0 3px 8px rgba(29, 78, 216, 0.25)',
-                          marginBottom: '0.5rem'
-                        }}
-                      >
-                        {custOtpSent ? 'Verify OTP & Enter' : 'Send OTP'}
-                      </button>
                     </div>
-                  )}
+
+                    <div style={{ textAlign: 'right', marginBottom: '0.4rem' }}>
+                      <a href="#forgot" onClick={(e) => { e.preventDefault(); alert('Password reset link sent to your registered email.'); }} style={{ fontSize: '0.7rem', color: '#1D4ED8', textDecoration: 'none', fontWeight: 600 }}>
+                        Forgot Password?
+                      </a>
+                    </div>
+
+                    <button
+                      type="submit"
+                      style={{
+                        width: '100%',
+                        padding: '0.6rem',
+                        background: 'linear-gradient(135deg, #1D4ED8, #2563EB)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '8px',
+                        fontWeight: 800,
+                        fontSize: '0.82rem',
+                        cursor: 'pointer',
+                        boxShadow: '0 3px 8px rgba(29, 78, 216, 0.25)',
+                        marginBottom: '0.5rem'
+                      }}
+                    >
+                      Login as Customer →
+                    </button>
+                  </form>
 
                   {/* Google Login Button */}
                   <button
