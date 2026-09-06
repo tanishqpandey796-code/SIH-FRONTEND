@@ -81,7 +81,7 @@ export default function LoginPage({ onLogin, onEmergencyDirect }) {
       return;
     }
     if (!regEmail.trim() || !regEmail.includes('@')) {
-      setRegError('Please enter a valid Gmail / Email address.');
+      setRegError('Please enter a valid Email address.');
       return;
     }
     if (!regPassword) {
@@ -667,10 +667,10 @@ export default function LoginPage({ onLogin, onEmergencyDirect }) {
                         </div>
                       </div>
 
-                      {/* 4. Gmail / Email */}
+                      {/* 4. Email */}
                       <div>
                         <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
-                          Gmail / Email <span style={{ color: '#EF4444' }}>*</span>
+                          Email <span style={{ color: '#EF4444' }}>*</span>
                         </label>
                         <div style={{ position: 'relative' }}>
                           <span style={{ position: 'absolute', left: '7px', top: '50%', transform: 'translateY(-50%)', opacity: 0.6, fontSize: '0.75rem' }}>✉️</span>
@@ -1183,10 +1183,10 @@ export default function LoginPage({ onLogin, onEmergencyDirect }) {
                       </div>
                     </div>
 
-                    {/* 4. Gmail / Email */}
+                    {/* 4. Email */}
                     <div style={{ marginBottom: '0.35rem' }}>
                       <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
-                        Gmail / Email Address *
+                        Email Address *
                       </label>
                       <input
                         type="email"
