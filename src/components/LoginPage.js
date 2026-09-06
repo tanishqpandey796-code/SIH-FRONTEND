@@ -1382,44 +1382,44 @@ export default function LoginPage({ onLogin, onEmergencyDirect }) {
                       </div>
                     </div>
 
-                    {/* 7. Verification Documents Drop Area */}
-                    <div style={{ marginBottom: '0.45rem' }}>
-                      <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.15rem' }}>
+                    {/* 7. Verification Documents Drop Area (Compact) */}
+                    <div style={{ marginBottom: '0.3rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.08rem' }}>
                         Verification Documents (Reg Cert / Bylaws) <span style={{ color: '#EF4444' }}>*</span>
                       </label>
                       <div style={{
                         border: '1.5px dashed #93C5FD',
                         background: '#EFF6FF',
-                        borderRadius: '8px',
-                        padding: '0.5rem 0.75rem',
+                        borderRadius: '6px',
+                        padding: '0.25rem 0.5rem',
                         position: 'relative'
                       }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2px' }}>
-                          <span style={{ fontSize: '1rem', color: '#1D4ED8' }}>📄</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                          <span style={{ fontSize: '0.85rem', color: '#1D4ED8' }}>📄</span>
                           <label
                             htmlFor="soc-doc-file-input"
                             style={{
                               background: '#1D4ED8',
                               color: 'white',
-                              padding: '3px 10px',
-                              borderRadius: '5px',
-                              fontSize: '0.7rem',
+                              padding: '2px 8px',
+                              borderRadius: '4px',
+                              fontSize: '0.68rem',
                               fontWeight: 700,
                               cursor: 'pointer',
                               display: 'inline-flex',
                               alignItems: 'center',
-                              gap: '0.25rem',
-                              boxShadow: '0 2px 4px rgba(29, 78, 216, 0.2)'
+                              gap: '0.2rem',
+                              boxShadow: '0 1px 3px rgba(29, 78, 216, 0.2)'
                             }}
                           >
                             ☁️ Choose file
                           </label>
-                          <span style={{ fontSize: '0.7rem', color: socRegDocName ? '#047857' : '#64748B', fontWeight: socRegDocName ? 700 : 500 }}>
+                          <span style={{ fontSize: '0.68rem', color: socRegDocName ? '#047857' : '#64748B', fontWeight: socRegDocName ? 700 : 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                             {socRegDocName ? `✓ ${socRegDocName}` : 'No file chosen'}
                           </span>
                         </div>
-                        <p style={{ margin: 0, fontSize: '0.63rem', color: '#64748B' }}>
-                          Upload your registration certificate / bylaws (PDF, JPG, PNG)
+                        <p style={{ margin: '1px 0 0 0', fontSize: '0.6rem', color: '#64748B' }}>
+                          Upload registration certificate / bylaws (PDF, JPG, PNG)
                         </p>
                         <input
                           id="soc-doc-file-input"
@@ -1440,20 +1440,20 @@ export default function LoginPage({ onLogin, onEmergencyDirect }) {
                       type="submit"
                       style={{
                         width: '100%',
-                        padding: '0.55rem',
+                        padding: '0.45rem',
                         background: 'linear-gradient(135deg, #1D4ED8, #2563EB)',
                         color: 'white',
                         border: 'none',
                         borderRadius: '8px',
                         fontWeight: 800,
-                        fontSize: '0.82rem',
+                        fontSize: '0.8rem',
                         cursor: 'pointer',
                         boxShadow: '0 3px 10px rgba(29, 78, 216, 0.3)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: '0.4rem',
-                        marginTop: '0.2rem'
+                        marginTop: '0.15rem'
                       }}
                     >
                       <span>🚀</span>
