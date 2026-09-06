@@ -3234,15 +3234,38 @@
               {isSocietyRegistering ? (
                 /* Cooperative Society Registration Form */
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.55rem' }}>
-                    <div>
-                      <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0F2C59', margin: 0 }}>
-                        Cooperative Society Registration
-                      </h3>
-                      <p style={{ fontSize: '0.72rem', color: '#64748B', margin: '1px 0 0 0' }}>
-                        Register with Reg Number, Credentials & Verification Docs
-                      </p>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.45rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                      {/* Shield Emblem Badge */}
+                      <div style={{
+                        width: '42px',
+                        height: '42px',
+                        borderRadius: '12px',
+                        background: 'linear-gradient(135deg, #0F2C59, #1D4ED8)',
+                        color: 'white',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '1.3rem',
+                        fontWeight: 900,
+                        boxShadow: '0 4px 10px rgba(15, 44, 89, 0.2)',
+                        flexShrink: 0
+                      }}>
+                        🛡️
+                      </div>
+
+                      <div>
+                        <h3 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, lineHeight: 1.2 }}>
+                          <span style={{ color: '#0F2C59' }}>Cooperative </span>
+                          <span style={{ color: '#1D4ED8' }}>Society Registration</span>
+                        </h3>
+                        <p style={{ fontSize: '0.65rem', color: '#64748B', margin: '1px 0 0 0', lineHeight: 1.3 }}>
+                          Register with Reg Number, Credentials & Verification Docs —<br />
+                          <span style={{ color: '#2563EB', fontWeight: 600 }}>Stronger Together • Fairer Tomorrow —</span>
+                        </p>
+                      </div>
                     </div>
+
                     <button
                       type="button"
                       onClick={() => { setIsSocietyRegistering(false); setSocRegError(''); }}
@@ -3254,11 +3277,45 @@
                         fontSize: '0.7rem',
                         fontWeight: 700,
                         color: '#475569',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        flexShrink: 0,
+                        marginLeft: '0.4rem'
                       }}
                     >
                       ← Back
                     </button>
+                  </div>
+
+                  {/* Step Tracker Navigation */}
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    background: '#F8FAFC',
+                    border: '1px solid #E2E8F0',
+                    borderRadius: '8px',
+                    padding: '0.35rem 0.5rem',
+                    marginBottom: '0.45rem'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                      <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#1D4ED8', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6rem', fontWeight: 800 }}>👤</div>
+                      <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#1D4ED8' }}>Basic Details</span>
+                    </div>
+                    <div style={{ flex: 1, height: '2px', background: '#CBD5E1', margin: '0 0.3rem' }}></div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', opacity: 0.6 }}>
+                      <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#E2E8F0', color: '#64748B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6rem', fontWeight: 800 }}>📄</div>
+                      <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748B' }}>Documents</span>
+                    </div>
+                    <div style={{ flex: 1, height: '2px', background: '#CBD5E1', margin: '0 0.3rem' }}></div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', opacity: 0.6 }}>
+                      <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#E2E8F0', color: '#64748B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6rem', fontWeight: 800 }}>☑️</div>
+                      <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748B' }}>Verification</span>
+                    </div>
+                    <div style={{ flex: 1, height: '2px', background: '#CBD5E1', margin: '0 0.3rem' }}></div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', opacity: 0.6 }}>
+                      <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#E2E8F0', color: '#64748B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.6rem', fontWeight: 800 }}>📥</div>
+                      <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748B' }}>Complete</span>
+                    </div>
                   </div>
 
                   {socRegError && (
@@ -3279,56 +3336,62 @@
                   <form onSubmit={handleSocietyRegister}>
                     {/* 1. Society Name */}
                     <div style={{ marginBottom: '0.35rem' }}>
-                      <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
-                        Society Name *
+                      <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
+                        Society Name <span style={{ color: '#EF4444' }}>*</span>
                       </label>
-                      <input
-                        type="text"
-                        placeholder="e.g. Delhi State Labour Cooperative Society Ltd"
-                        value={socRegName}
-                        onChange={(e) => setSocRegName(e.target.value)}
-                        style={{
-                          width: '100%',
-                          boxSizing: 'border-box',
-                          padding: '0.4rem 0.6rem',
-                          borderRadius: '6px',
-                          border: '1.5px solid #CBD5E1',
-                          fontSize: '0.78rem',
-                          outline: 'none'
-                        }}
-                      />
+                      <div style={{ position: 'relative' }}>
+                        <span style={{ position: 'absolute', left: '7px', top: '50%', transform: 'translateY(-50%)', opacity: 0.6, fontSize: '0.75rem' }}>🏛️</span>
+                        <input
+                          type="text"
+                          placeholder="e.g. Delhi State Labour Cooperative Society Ltd"
+                          value={socRegName}
+                          onChange={(e) => setSocRegName(e.target.value)}
+                          style={{
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            padding: '0.38rem 0.55rem 0.38rem 1.65rem',
+                            borderRadius: '6px',
+                            border: '1.5px solid #CBD5E1',
+                            fontSize: '0.78rem',
+                            outline: 'none'
+                          }}
+                        />
+                      </div>
                     </div>
 
                     {/* 2. Registration Number */}
                     <div style={{ marginBottom: '0.35rem' }}>
-                      <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
-                        Registration Number *
+                      <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
+                        Registration Number <span style={{ color: '#EF4444' }}>*</span>
                       </label>
-                      <input
-                        type="text"
-                        placeholder="e.g. DL-LAB-2024-582"
-                        value={socRegNumber}
-                        onChange={(e) => setSocRegNumber(e.target.value)}
-                        style={{
-                          width: '100%',
-                          boxSizing: 'border-box',
-                          padding: '0.4rem 0.6rem',
-                          borderRadius: '6px',
-                          border: '1.5px solid #CBD5E1',
-                          fontSize: '0.78rem',
-                          outline: 'none'
-                        }}
-                      />
+                      <div style={{ position: 'relative' }}>
+                        <span style={{ position: 'absolute', left: '7px', top: '50%', transform: 'translateY(-50%)', opacity: 0.6, fontSize: '0.75rem' }}>📄</span>
+                        <input
+                          type="text"
+                          placeholder="e.g. DL-LAB-2024-582"
+                          value={socRegNumber}
+                          onChange={(e) => setSocRegNumber(e.target.value)}
+                          style={{
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            padding: '0.38rem 0.55rem 0.38rem 1.65rem',
+                            borderRadius: '6px',
+                            border: '1.5px solid #CBD5E1',
+                            fontSize: '0.78rem',
+                            outline: 'none'
+                          }}
+                        />
+                      </div>
                     </div>
 
                     {/* 3. Mobile Number */}
                     <div style={{ marginBottom: '0.35rem' }}>
-                      <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
-                        Mobile Number *
+                      <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
+                        Mobile Number <span style={{ color: '#EF4444' }}>*</span>
                       </label>
-                      <div style={{ display: 'flex', gap: '0.3rem' }}>
+                      <div style={{ display: 'flex', gap: '0.25rem' }}>
                         <span style={{
-                          padding: '0.4rem 0.5rem',
+                          padding: '0.38rem 0.45rem',
                           background: '#F1F5F9',
                           border: '1.5px solid #CBD5E1',
                           borderRadius: '6px',
@@ -3336,8 +3399,10 @@
                           fontWeight: 700,
                           color: '#475569',
                           display: 'flex',
-                          alignItems: 'center'
-                        }}>+91</span>
+                          alignItems: 'center',
+                          whiteSpace: 'nowrap',
+                          flexShrink: 0
+                        }}>📞 +91 ▾</span>
                         <input
                           type="tel"
                           placeholder="10-digit mobile number"
@@ -3347,7 +3412,7 @@
                           style={{
                             width: '100%',
                             boxSizing: 'border-box',
-                            padding: '0.4rem 0.6rem',
+                            padding: '0.38rem 0.55rem',
                             borderRadius: '6px',
                             border: '1.5px solid #CBD5E1',
                             fontSize: '0.78rem',
@@ -3357,43 +3422,22 @@
                       </div>
                     </div>
 
-                    {/* 4. Email */}
+                    {/* 4. Email Address */}
                     <div style={{ marginBottom: '0.35rem' }}>
-                      <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
-                        Email Address *
+                      <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
+                        Email Address <span style={{ color: '#EF4444' }}>*</span>
                       </label>
-                      <input
-                        type="email"
-                        placeholder="e.g. society.admin@gmail.com"
-                        value={socRegEmail}
-                        onChange={(e) => setSocRegEmail(e.target.value)}
-                        style={{
-                          width: '100%',
-                          boxSizing: 'border-box',
-                          padding: '0.4rem 0.6rem',
-                          borderRadius: '6px',
-                          border: '1.5px solid #CBD5E1',
-                          fontSize: '0.78rem',
-                          outline: 'none'
-                        }}
-                      />
-                    </div>
-
-                    {/* 5. Password & Confirm Password */}
-                    <div style={{ display: 'flex', gap: '0.35rem', marginBottom: '0.35rem' }}>
-                      <div style={{ flex: 1 }}>
-                        <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
-                          Password *
-                        </label>
+                      <div style={{ position: 'relative' }}>
+                        <span style={{ position: 'absolute', left: '7px', top: '50%', transform: 'translateY(-50%)', opacity: 0.6, fontSize: '0.75rem' }}>✉️</span>
                         <input
-                          type="password"
-                          placeholder="Create password"
-                          value={socRegPassword}
-                          onChange={(e) => setSocRegPassword(e.target.value)}
+                          type="email"
+                          placeholder="e.g. society.admin@gmail.com"
+                          value={socRegEmail}
+                          onChange={(e) => setSocRegEmail(e.target.value)}
                           style={{
                             width: '100%',
                             boxSizing: 'border-box',
-                            padding: '0.4rem 0.6rem',
+                            padding: '0.38rem 0.55rem 0.38rem 1.65rem',
                             borderRadius: '6px',
                             border: '1.5px solid #CBD5E1',
                             fontSize: '0.78rem',
@@ -3401,79 +3445,168 @@
                           }}
                         />
                       </div>
-                      <div style={{ flex: 1 }}>
-                        <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
-                          Confirm Password *
+                    </div>
+
+                    {/* 5. Password & Confirm Password (2-Column Layout) */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.35rem 0.5rem', marginBottom: '0.35rem' }}>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
+                          Password <span style={{ color: '#EF4444' }}>*</span>
                         </label>
-                        <input
-                          type="password"
-                          placeholder="Confirm password"
-                          value={socRegConfirmPassword}
-                          onChange={(e) => setSocRegConfirmPassword(e.target.value)}
-                          style={{
-                            width: '100%',
-                            boxSizing: 'border-box',
-                            padding: '0.4rem 0.6rem',
-                            borderRadius: '6px',
-                            border: '1.5px solid #CBD5E1',
-                            fontSize: '0.78rem',
-                            outline: 'none'
-                          }}
-                        />
+                        <div style={{ position: 'relative' }}>
+                          <span style={{ position: 'absolute', left: '7px', top: '50%', transform: 'translateY(-50%)', opacity: 0.6, fontSize: '0.75rem' }}>🔒</span>
+                          <input
+                            type={showSocietyPassword ? 'text' : 'password'}
+                            placeholder="Create password"
+                            value={socRegPassword}
+                            onChange={(e) => setSocRegPassword(e.target.value)}
+                            style={{
+                              width: '100%',
+                              boxSizing: 'border-box',
+                              padding: '0.38rem 1.6rem 0.38rem 1.65rem',
+                              borderRadius: '6px',
+                              border: '1.5px solid #CBD5E1',
+                              fontSize: '0.78rem',
+                              outline: 'none'
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowSocietyPassword(!showSocietyPassword)}
+                            style={{
+                              position: 'absolute',
+                              right: '6px',
+                              top: '50%',
+                              transform: 'translateY(-50%)',
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              fontSize: '0.7rem',
+                              opacity: 0.7
+                            }}
+                          >
+                            {showSocietyPassword ? '👁️' : '👁️‍🗨️'}
+                          </button>
+                        </div>
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
+                          Confirm Password <span style={{ color: '#EF4444' }}>*</span>
+                        </label>
+                        <div style={{ position: 'relative' }}>
+                          <span style={{ position: 'absolute', left: '7px', top: '50%', transform: 'translateY(-50%)', opacity: 0.6, fontSize: '0.75rem' }}>🔒</span>
+                          <input
+                            type={showSocietyPassword ? 'text' : 'password'}
+                            placeholder="Confirm password"
+                            value={socRegConfirmPassword}
+                            onChange={(e) => setSocRegConfirmPassword(e.target.value)}
+                            style={{
+                              width: '100%',
+                              boxSizing: 'border-box',
+                              padding: '0.38rem 1.6rem 0.38rem 1.65rem',
+                              borderRadius: '6px',
+                              border: '1.5px solid #CBD5E1',
+                              fontSize: '0.78rem',
+                              outline: 'none'
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowSocietyPassword(!showSocietyPassword)}
+                            style={{
+                              position: 'absolute',
+                              right: '6px',
+                              top: '50%',
+                              transform: 'translateY(-50%)',
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              fontSize: '0.7rem',
+                              opacity: 0.7
+                            }}
+                          >
+                            {showSocietyPassword ? '👁️' : '👁️‍🗨️'}
+                          </button>
+                        </div>
                       </div>
                     </div>
 
                     {/* 6. Address */}
                     <div style={{ marginBottom: '0.35rem' }}>
-                      <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
-                        Address *
+                      <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
+                        Address <span style={{ color: '#EF4444' }}>*</span>
                       </label>
-                      <input
-                        type="text"
-                        placeholder="Enter registered office address"
-                        value={socRegAddress}
-                        onChange={(e) => setSocRegAddress(e.target.value)}
-                        style={{
-                          width: '100%',
-                          boxSizing: 'border-box',
-                          padding: '0.4rem 0.6rem',
-                          borderRadius: '6px',
-                          border: '1.5px solid #CBD5E1',
-                          fontSize: '0.78rem',
-                          outline: 'none'
-                        }}
-                      />
+                      <div style={{ position: 'relative' }}>
+                        <span style={{ position: 'absolute', left: '7px', top: '50%', transform: 'translateY(-50%)', opacity: 0.6, fontSize: '0.75rem' }}>📍</span>
+                        <input
+                          type="text"
+                          placeholder="Enter registered office address"
+                          value={socRegAddress}
+                          onChange={(e) => setSocRegAddress(e.target.value)}
+                          style={{
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            padding: '0.38rem 0.55rem 0.38rem 1.65rem',
+                            borderRadius: '6px',
+                            border: '1.5px solid #CBD5E1',
+                            fontSize: '0.78rem',
+                            outline: 'none'
+                          }}
+                        />
+                      </div>
                     </div>
 
-                    {/* 7. Verification Documents */}
-                    <div style={{ marginBottom: '0.4rem' }}>
-                      <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
-                        Verification Documents (Reg Cert / Bylaws) *
+                    {/* 7. Verification Documents Drop Area */}
+                    <div style={{ marginBottom: '0.45rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.15rem' }}>
+                        Verification Documents (Reg Cert / Bylaws) <span style={{ color: '#EF4444' }}>*</span>
                       </label>
-                      <input
-                        type="file"
-                        accept=".pdf,.png,.jpg,.jpeg"
-                        onChange={(e) => {
-                          if (e.target.files && e.target.files[0]) {
-                            setSocRegDocName(e.target.files[0].name);
-                          }
-                        }}
-                        style={{
-                          width: '100%',
-                          boxSizing: 'border-box',
-                          padding: '0.35rem 0.6rem',
-                          borderRadius: '6px',
-                          border: '1.5px dashed #3B82F6',
-                          fontSize: '0.72rem',
-                          background: '#EFF6FF',
-                          cursor: 'pointer'
-                        }}
-                      />
-                      {socRegDocName && (
-                        <span style={{ fontSize: '0.65rem', color: '#059669', fontWeight: 700, marginTop: '2px', display: 'block' }}>
-                          ✓ File selected: {socRegDocName}
-                        </span>
-                      )}
+                      <div style={{
+                        border: '1.5px dashed #93C5FD',
+                        background: '#EFF6FF',
+                        borderRadius: '8px',
+                        padding: '0.5rem 0.75rem',
+                        position: 'relative'
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2px' }}>
+                          <span style={{ fontSize: '1rem', color: '#1D4ED8' }}>📄</span>
+                          <label
+                            htmlFor="soc-doc-file-input-index"
+                            style={{
+                              background: '#1D4ED8',
+                              color: 'white',
+                              padding: '3px 10px',
+                              borderRadius: '5px',
+                              fontSize: '0.7rem',
+                              fontWeight: 700,
+                              cursor: 'pointer',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.25rem',
+                              boxShadow: '0 2px 4px rgba(29, 78, 216, 0.2)'
+                            }}
+                          >
+                            ☁️ Choose file
+                          </label>
+                          <span style={{ fontSize: '0.7rem', color: socRegDocName ? '#047857' : '#64748B', fontWeight: socRegDocName ? 700 : 500 }}>
+                            {socRegDocName ? `✓ ${socRegDocName}` : 'No file chosen'}
+                          </span>
+                        </div>
+                        <p style={{ margin: 0, fontSize: '0.63rem', color: '#64748B' }}>
+                          Upload your registration certificate / bylaws (PDF, JPG, PNG)
+                        </p>
+                        <input
+                          id="soc-doc-file-input-index"
+                          type="file"
+                          accept=".pdf,.png,.jpg,.jpeg"
+                          onChange={(e) => {
+                            if (e.target.files && e.target.files[0]) {
+                              setSocRegDocName(e.target.files[0].name);
+                            }
+                          }}
+                          style={{ display: 'none' }}
+                        />
+                      </div>
                     </div>
 
                     {/* Submit Button */}
@@ -3482,18 +3615,24 @@
                       style={{
                         width: '100%',
                         padding: '0.55rem',
-                        background: 'linear-gradient(135deg, #0F2C59, #1D4ED8)',
+                        background: 'linear-gradient(135deg, #1D4ED8, #2563EB)',
                         color: 'white',
                         border: 'none',
                         borderRadius: '8px',
                         fontWeight: 800,
-                        fontSize: '0.8rem',
+                        fontSize: '0.82rem',
                         cursor: 'pointer',
-                        boxShadow: '0 3px 8px rgba(15, 44, 89, 0.25)',
+                        boxShadow: '0 3px 10px rgba(29, 78, 216, 0.3)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.4rem',
                         marginTop: '0.2rem'
                       }}
                     >
-                      Submit Society Registration ✓
+                      <span>🚀</span>
+                      <span>Submit Society Registration</span>
+                      <span>→</span>
                     </button>
                   </form>
 
