@@ -2211,6 +2211,22 @@
       const [regOtp, setRegOtp] = useState('');
       const [regOtpSent, setRegOtpSent] = useState(false);
       const [regError, setRegError] = useState('');
+      const [regProfilePic, setRegProfilePic] = useState(null);
+
+      const handleProfilePicChange = (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) {
+          if (!file.type.startsWith('image/')) {
+            setRegError('Please select a valid image file (PNG, JPG, JPEG).');
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            setRegProfilePic(ev.target.result);
+          };
+          reader.readAsDataURL(file);
+        }
+      };
 
       // Registered Customers Store (Persisted in localStorage)
       const [customersList, setCustomersList] = useState(() => {
@@ -2281,7 +2297,8 @@
           mobile: regMobile,
           email: regEmail.trim(),
           password: regPassword,
-          address: regAddress.trim()
+          address: regAddress.trim(),
+          profilePic: regProfilePic
         };
         const updatedList = [newCustomer, ...customersList];
         setCustomersList(updatedList);
@@ -2292,6 +2309,7 @@
         alert('✓ Customer Account Created Successfully! Please log in with your Username and Password.');
         setIsRegistering(false);
         setRegOtpSent(false);
+        setRegProfilePic(null);
         setCustUsername(newCustomer.username);
         setCustPassword(newCustomer.password);
       };
@@ -2323,6 +2341,7 @@
               email: matchedUser.email,
               phone: matchedUser.mobile,
               address: matchedUser.address,
+              profilePic: matchedUser.profilePic,
               role: 'customer'
             }, 'customer');
           } else {
@@ -2639,37 +2658,51 @@
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.45rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                      {/* Avatar Profile + Badge Icon */}
-                      <div style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '50%',
-                        background: 'linear-gradient(135deg, #DBEAFE, #EFF6FF)',
-                        border: '1.5px solid #93C5FD',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '1.2rem',
-                        position: 'relative',
-                        flexShrink: 0
-                      }}>
-                        👤
+                      {/* Interactive Avatar Profile Upload */}
+                      <label
+                        htmlFor="cust-profile-pic-input-index"
+                        title="Click to upload profile photo"
+                        style={{
+                          width: '42px',
+                          height: '42px',
+                          borderRadius: '50%',
+                          background: regProfilePic ? `url(${regProfilePic}) center/cover no-repeat` : 'linear-gradient(135deg, #DBEAFE, #EFF6FF)',
+                          border: regProfilePic ? '2px solid #1D4ED8' : '1.5px solid #93C5FD',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '1.2rem',
+                          position: 'relative',
+                          flexShrink: 0,
+                          cursor: 'pointer',
+                          boxShadow: '0 2px 6px rgba(29, 78, 216, 0.15)'
+                        }}
+                      >
+                        {!regProfilePic && <span>👤</span>}
+                        <input
+                          id="cust-profile-pic-input-index"
+                          type="file"
+                          accept="image/*"
+                          onChange={handleProfilePicChange}
+                          style={{ display: 'none' }}
+                        />
                         <div style={{
                           position: 'absolute',
-                          bottom: '-1px',
-                          right: '-1px',
-                          width: '15px',
-                          height: '15px',
+                          bottom: '-2px',
+                          right: '-2px',
+                          width: '16px',
+                          height: '16px',
                           borderRadius: '50%',
                           background: '#1D4ED8',
                           color: 'white',
-                          fontSize: '0.65rem',
+                          fontSize: '0.7rem',
                           fontWeight: 900,
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'center'
+                          justifyContent: 'center',
+                          border: '1.5px solid white'
                         }}>+</div>
-                      </div>
+                      </label>
 
                       <div>
                         <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0F2C59', margin: 0, lineHeight: 1.2 }}>
@@ -2683,7 +2716,7 @@
 
                     <button
                       type="button"
-                      onClick={() => { setIsRegistering(false); setRegOtpSent(false); setRegError(''); }}
+                      onClick={() => { setIsRegistering(false); setRegOtpSent(false); setRegError(''); setRegProfilePic(null); }}
                       style={{
                         background: '#F1F5F9',
                         border: '1px solid #CBD5E1',
