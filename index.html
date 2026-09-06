@@ -2637,15 +2637,50 @@
               {isRegistering ? (
                 /* Customer Account Creation / Registration Form */
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.45rem' }}>
-                    <div>
-                      <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0F2C59', margin: 0 }}>
-                        Create Customer Account
-                      </h3>
-                      <p style={{ fontSize: '0.7rem', color: '#64748B', margin: '1px 0 0 0' }}>
-                        Register with Username, Password, Mobile & Address
-                      </p>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.45rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                      {/* Avatar Profile + Badge Icon */}
+                      <div style={{
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '50%',
+                        background: 'linear-gradient(135deg, #DBEAFE, #EFF6FF)',
+                        border: '1.5px solid #93C5FD',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '1.2rem',
+                        position: 'relative',
+                        flexShrink: 0
+                      }}>
+                        👤
+                        <div style={{
+                          position: 'absolute',
+                          bottom: '-1px',
+                          right: '-1px',
+                          width: '15px',
+                          height: '15px',
+                          borderRadius: '50%',
+                          background: '#1D4ED8',
+                          color: 'white',
+                          fontSize: '0.65rem',
+                          fontWeight: 900,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>+</div>
+                      </div>
+
+                      <div>
+                        <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0F2C59', margin: 0, lineHeight: 1.2 }}>
+                          Create Customer Account
+                        </h3>
+                        <p style={{ fontSize: '0.68rem', color: '#64748B', margin: '1px 0 0 0' }}>
+                          Join our platform and get access to local services, trusted workers and much more!
+                        </p>
+                      </div>
                     </div>
+
                     <button
                       type="button"
                       onClick={() => { setIsRegistering(false); setRegOtpSent(false); setRegError(''); }}
@@ -2657,7 +2692,9 @@
                         fontSize: '0.7rem',
                         fontWeight: 700,
                         color: '#475569',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        flexShrink: 0,
+                        marginLeft: '0.4rem'
                       }}
                     >
                       ← Back
@@ -2685,55 +2722,61 @@
                       {/* 1. Username */}
                       <div>
                         <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
-                          Username *
+                          Username <span style={{ color: '#EF4444' }}>*</span>
                         </label>
-                        <input
-                          type="text"
-                          placeholder="Choose username"
-                          value={regUsername}
-                          onChange={(e) => setRegUsername(e.target.value)}
-                          disabled={regOtpSent}
-                          style={{
-                            width: '100%',
-                            boxSizing: 'border-box',
-                            padding: '0.38rem 0.55rem',
-                            borderRadius: '6px',
-                            border: '1.5px solid #CBD5E1',
-                            fontSize: '0.78rem',
-                            outline: 'none',
-                            background: regOtpSent ? '#F8FAFC' : 'white'
-                          }}
-                        />
+                        <div style={{ position: 'relative' }}>
+                          <span style={{ position: 'absolute', left: '7px', top: '50%', transform: 'translateY(-50%)', opacity: 0.6, fontSize: '0.75rem' }}>👤</span>
+                          <input
+                            type="text"
+                            placeholder="Choose a username"
+                            value={regUsername}
+                            onChange={(e) => setRegUsername(e.target.value)}
+                            disabled={regOtpSent}
+                            style={{
+                              width: '100%',
+                              boxSizing: 'border-box',
+                              padding: '0.38rem 0.55rem 0.38rem 1.65rem',
+                              borderRadius: '6px',
+                              border: '1.5px solid #CBD5E1',
+                              fontSize: '0.78rem',
+                              outline: 'none',
+                              background: regOtpSent ? '#F8FAFC' : 'white'
+                            }}
+                          />
+                        </div>
                       </div>
 
                       {/* 2. Name */}
                       <div>
                         <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
-                          Full Name *
+                          Full Name <span style={{ color: '#EF4444' }}>*</span>
                         </label>
-                        <input
-                          type="text"
-                          placeholder="Enter full name"
-                          value={regName}
-                          onChange={(e) => setRegName(e.target.value)}
-                          disabled={regOtpSent}
-                          style={{
-                            width: '100%',
-                            boxSizing: 'border-box',
-                            padding: '0.38rem 0.55rem',
-                            borderRadius: '6px',
-                            border: '1.5px solid #CBD5E1',
-                            fontSize: '0.78rem',
-                            outline: 'none',
-                            background: regOtpSent ? '#F8FAFC' : 'white'
-                          }}
-                        />
+                        <div style={{ position: 'relative' }}>
+                          <span style={{ position: 'absolute', left: '7px', top: '50%', transform: 'translateY(-50%)', opacity: 0.6, fontSize: '0.75rem' }}>👤</span>
+                          <input
+                            type="text"
+                            placeholder="Enter full name"
+                            value={regName}
+                            onChange={(e) => setRegName(e.target.value)}
+                            disabled={regOtpSent}
+                            style={{
+                              width: '100%',
+                              boxSizing: 'border-box',
+                              padding: '0.38rem 0.55rem 0.38rem 1.65rem',
+                              borderRadius: '6px',
+                              border: '1.5px solid #CBD5E1',
+                              fontSize: '0.78rem',
+                              outline: 'none',
+                              background: regOtpSent ? '#F8FAFC' : 'white'
+                            }}
+                          />
+                        </div>
                       </div>
 
                       {/* 3. Mobile Number */}
                       <div>
                         <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
-                          Mobile Number *
+                          Mobile Number <span style={{ color: '#EF4444' }}>*</span>
                         </label>
                         <div style={{ display: 'flex', gap: '0.25rem' }}>
                           <span style={{
@@ -2748,7 +2791,7 @@
                             alignItems: 'center',
                             whiteSpace: 'nowrap',
                             flexShrink: 0
-                          }}>+91</span>
+                          }}>📞 +91 ▾</span>
                           <input
                             type="tel"
                             placeholder="10-digit mobile"
@@ -2773,98 +2816,144 @@
                       {/* 4. Gmail / Email */}
                       <div>
                         <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
-                          Gmail / Email *
+                          Gmail / Email <span style={{ color: '#EF4444' }}>*</span>
                         </label>
-                        <input
-                          type="email"
-                          placeholder="Enter email address"
-                          value={regEmail}
-                          onChange={(e) => setRegEmail(e.target.value)}
-                          disabled={regOtpSent}
-                          style={{
-                            width: '100%',
-                            boxSizing: 'border-box',
-                            padding: '0.38rem 0.55rem',
-                            borderRadius: '6px',
-                            border: '1.5px solid #CBD5E1',
-                            fontSize: '0.78rem',
-                            outline: 'none',
-                            background: regOtpSent ? '#F8FAFC' : 'white'
-                          }}
-                        />
+                        <div style={{ position: 'relative' }}>
+                          <span style={{ position: 'absolute', left: '7px', top: '50%', transform: 'translateY(-50%)', opacity: 0.6, fontSize: '0.75rem' }}>✉️</span>
+                          <input
+                            type="email"
+                            placeholder="Enter email address"
+                            value={regEmail}
+                            onChange={(e) => setRegEmail(e.target.value)}
+                            disabled={regOtpSent}
+                            style={{
+                              width: '100%',
+                              boxSizing: 'border-box',
+                              padding: '0.38rem 0.55rem 0.38rem 1.65rem',
+                              borderRadius: '6px',
+                              border: '1.5px solid #CBD5E1',
+                              fontSize: '0.78rem',
+                              outline: 'none',
+                              background: regOtpSent ? '#F8FAFC' : 'white'
+                            }}
+                          />
+                        </div>
                       </div>
 
                       {/* 5. Password */}
                       <div>
                         <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
-                          Password *
+                          Password <span style={{ color: '#EF4444' }}>*</span>
                         </label>
-                        <input
-                          type="password"
-                          placeholder="Create password"
-                          value={regPassword}
-                          onChange={(e) => setRegPassword(e.target.value)}
-                          disabled={regOtpSent}
-                          style={{
-                            width: '100%',
-                            boxSizing: 'border-box',
-                            padding: '0.38rem 0.55rem',
-                            borderRadius: '6px',
-                            border: '1.5px solid #CBD5E1',
-                            fontSize: '0.78rem',
-                            outline: 'none',
-                            background: regOtpSent ? '#F8FAFC' : 'white'
-                          }}
-                        />
+                        <div style={{ position: 'relative' }}>
+                          <span style={{ position: 'absolute', left: '7px', top: '50%', transform: 'translateY(-50%)', opacity: 0.6, fontSize: '0.75rem' }}>🔒</span>
+                          <input
+                            type={showCustPassword ? 'text' : 'password'}
+                            placeholder="Create password"
+                            value={regPassword}
+                            onChange={(e) => setRegPassword(e.target.value)}
+                            disabled={regOtpSent}
+                            style={{
+                              width: '100%',
+                              boxSizing: 'border-box',
+                              padding: '0.38rem 1.6rem 0.38rem 1.65rem',
+                              borderRadius: '6px',
+                              border: '1.5px solid #CBD5E1',
+                              fontSize: '0.78rem',
+                              outline: 'none',
+                              background: regOtpSent ? '#F8FAFC' : 'white'
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowCustPassword(!showCustPassword)}
+                            style={{
+                              position: 'absolute',
+                              right: '6px',
+                              top: '50%',
+                              transform: 'translateY(-50%)',
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              fontSize: '0.7rem',
+                              opacity: 0.7
+                            }}
+                          >
+                            {showCustPassword ? '👁️' : '👁️‍🗨️'}
+                          </button>
+                        </div>
                       </div>
 
                       {/* 6. Confirm Password */}
                       <div>
                         <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
-                          Confirm Password *
+                          Confirm Password <span style={{ color: '#EF4444' }}>*</span>
                         </label>
-                        <input
-                          type="password"
-                          placeholder="Confirm password"
-                          value={regConfirmPassword}
-                          onChange={(e) => setRegConfirmPassword(e.target.value)}
-                          disabled={regOtpSent}
-                          style={{
-                            width: '100%',
-                            boxSizing: 'border-box',
-                            padding: '0.38rem 0.55rem',
-                            borderRadius: '6px',
-                            border: '1.5px solid #CBD5E1',
-                            fontSize: '0.78rem',
-                            outline: 'none',
-                            background: regOtpSent ? '#F8FAFC' : 'white'
-                          }}
-                        />
+                        <div style={{ position: 'relative' }}>
+                          <span style={{ position: 'absolute', left: '7px', top: '50%', transform: 'translateY(-50%)', opacity: 0.6, fontSize: '0.75rem' }}>🔒</span>
+                          <input
+                            type={showCustPassword ? 'text' : 'password'}
+                            placeholder="Confirm password"
+                            value={regConfirmPassword}
+                            onChange={(e) => setRegConfirmPassword(e.target.value)}
+                            disabled={regOtpSent}
+                            style={{
+                              width: '100%',
+                              boxSizing: 'border-box',
+                              padding: '0.38rem 1.6rem 0.38rem 1.65rem',
+                              borderRadius: '6px',
+                              border: '1.5px solid #CBD5E1',
+                              fontSize: '0.78rem',
+                              outline: 'none',
+                              background: regOtpSent ? '#F8FAFC' : 'white'
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowCustPassword(!showCustPassword)}
+                            style={{
+                              position: 'absolute',
+                              right: '6px',
+                              top: '50%',
+                              transform: 'translateY(-50%)',
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              fontSize: '0.7rem',
+                              opacity: 0.7
+                            }}
+                          >
+                            {showCustPassword ? '👁️' : '👁️‍🗨️'}
+                          </button>
+                        </div>
                       </div>
                     </div>
 
                     {/* 7. Address */}
                     <div style={{ marginBottom: '0.35rem' }}>
                       <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
-                        Address *
+                        Address <span style={{ color: '#EF4444' }}>*</span>
                       </label>
-                      <input
-                        type="text"
-                        placeholder="Enter full residential address"
-                        value={regAddress}
-                        onChange={(e) => setRegAddress(e.target.value)}
-                        disabled={regOtpSent}
-                        style={{
-                          width: '100%',
-                          boxSizing: 'border-box',
-                          padding: '0.38rem 0.55rem',
-                          borderRadius: '6px',
-                          border: '1.5px solid #CBD5E1',
-                          fontSize: '0.78rem',
-                          outline: 'none',
-                          background: regOtpSent ? '#F8FAFC' : 'white'
-                        }}
-                      />
+                      <div style={{ position: 'relative' }}>
+                        <span style={{ position: 'absolute', left: '7px', top: '50%', transform: 'translateY(-50%)', opacity: 0.6, fontSize: '0.75rem' }}>📍</span>
+                        <input
+                          type="text"
+                          placeholder="Enter full residential address"
+                          value={regAddress}
+                          onChange={(e) => setRegAddress(e.target.value)}
+                          disabled={regOtpSent}
+                          style={{
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            padding: '0.38rem 0.55rem 0.38rem 1.65rem',
+                            borderRadius: '6px',
+                            border: '1.5px solid #CBD5E1',
+                            fontSize: '0.78rem',
+                            outline: 'none',
+                            background: regOtpSent ? '#F8FAFC' : 'white'
+                          }}
+                        />
+                      </div>
                     </div>
 
                     {/* 8. OTP Verification */}
@@ -2872,7 +2961,7 @@
                       <div style={{ marginBottom: '0.35rem', background: '#EFF6FF', padding: '0.4rem 0.55rem', borderRadius: '6px', border: '1.5px solid #3B82F6' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.1rem' }}>
                           <label style={{ fontSize: '0.7rem', fontWeight: 700, color: '#1E3A8A' }}>
-                            OTP Verification *
+                            OTP Verification <span style={{ color: '#EF4444' }}>*</span>
                           </label>
                           <span style={{ fontSize: '0.65rem', color: '#2563EB', fontWeight: 700 }}>
                             Demo OTP: 4829
