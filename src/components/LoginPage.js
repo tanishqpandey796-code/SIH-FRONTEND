@@ -450,7 +450,7 @@ export default function LoginPage({ onLogin, onEmergencyDirect }) {
                       </label>
                       <div style={{ display: 'flex', gap: '0.35rem' }}>
                         <span style={{
-                          padding: '0.45rem 0.6rem',
+                          padding: '0.42rem 0.6rem',
                           background: '#F1F5F9',
                           border: '1.5px solid #CBD5E1',
                           borderRadius: '8px',
@@ -458,7 +458,9 @@ export default function LoginPage({ onLogin, onEmergencyDirect }) {
                           fontWeight: 700,
                           color: '#475569',
                           display: 'flex',
-                          alignItems: 'center'
+                          alignItems: 'center',
+                          whiteSpace: 'nowrap',
+                          flexShrink: 0
                         }}>+91</span>
                         <input
                           type="tel"
@@ -672,16 +674,18 @@ export default function LoginPage({ onLogin, onEmergencyDirect }) {
                         </label>
                         <div style={{ display: 'flex', gap: '0.35rem' }}>
                           <span style={{
-                            padding: '0.5rem 0.65rem',
+                            padding: '0.42rem 0.6rem',
                             background: '#F1F5F9',
                             border: '1.5px solid #CBD5E1',
                             borderRadius: '8px',
-                            fontSize: '0.82rem',
+                            fontSize: '0.8rem',
                             fontWeight: 700,
                             color: '#475569',
                             display: 'flex',
-                            alignItems: 'center'
-                          }}>+91 IN</span>
+                            alignItems: 'center',
+                            whiteSpace: 'nowrap',
+                            flexShrink: 0
+                          }}>+91</span>
                           <input
                             type="tel"
                             placeholder="Enter 10-digit mobile number"
@@ -691,7 +695,7 @@ export default function LoginPage({ onLogin, onEmergencyDirect }) {
                             style={{
                               width: '100%',
                               boxSizing: 'border-box',
-                              padding: '0.5rem 0.75rem',
+                              padding: '0.42rem 0.65rem',
                               borderRadius: '8px',
                               border: '1.5px solid #CBD5E1',
                               fontSize: '0.82rem',
