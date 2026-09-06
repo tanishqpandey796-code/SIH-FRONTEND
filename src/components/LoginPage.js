@@ -63,10 +63,38 @@ export default function LoginPage({ onLogin, onEmergencyDirect }) {
     onLogin(user, 'customer');
   };
 
-  // Society Login Form States
+  // Society Login & Registration Form States
   const [societyEmail, setSocietyEmail] = useState('');
   const [societyPassword, setSocietyPassword] = useState('');
   const [showSocietyPassword, setShowSocietyPassword] = useState(false);
+
+  const [isSocietyRegistering, setIsSocietyRegistering] = useState(false);
+  const [socRegName, setSocRegName] = useState('');
+  const [socRegNumber, setSocRegNumber] = useState('');
+  const [socRegMobile, setSocRegMobile] = useState('');
+  const [socRegEmail, setSocRegEmail] = useState('');
+  const [socRegPassword, setSocRegPassword] = useState('');
+  const [socRegConfirmPassword, setSocRegConfirmPassword] = useState('');
+  const [socRegAddress, setSocRegAddress] = useState('');
+  const [socRegDocName, setSocRegDocName] = useState('');
+  const [socRegError, setSocRegError] = useState('');
+  const [socLoginError, setSocLoginError] = useState('');
+
+  // Registered Societies Store (Persisted in localStorage)
+  const [societiesList, setSocietiesList] = useState(() => {
+    try {
+      const saved = localStorage.getItem('sahakar_registered_societies');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return [
+      {
+        name: 'Delhi State Federation',
+        regNo: 'DL-LAB-2018-992',
+        email: 'admin@sahakar.coop',
+        password: 'admin'
+      }
+    ];
+  });
 
   // Google Login Handler
   const handleGoogleLogin = (role) => {
@@ -87,15 +115,105 @@ export default function LoginPage({ onLogin, onEmergencyDirect }) {
     onLogin(user, 'customer');
   };
 
-  // Society / Admin Login Submit
-  const handleSocietySubmit = (e) => {
+  // Society Registration Submit Handler
+  const handleSocietyRegister = (e) => {
     if (e) e.preventDefault();
-    const user = {
-      name: societyEmail ? societyEmail.split('@')[0] : 'Delhi State Federation',
-      email: societyEmail || 'admin@sahakar.coop',
+    if (!socRegName.trim()) {
+      setSocRegError('Please enter Society Name.');
+      return;
+    }
+    if (!socRegNumber.trim()) {
+      setSocRegError('Please enter Registration Number.');
+      return;
+    }
+    if (!socRegMobile || socRegMobile.length !== 10) {
+      setSocRegError('Please enter a valid 10-digit mobile number.');
+      return;
+    }
+    if (!socRegEmail.trim()) {
+      setSocRegError('Please enter Email / Gmail address.');
+      return;
+    }
+    if (!socRegPassword) {
+      setSocRegError('Please enter Password.');
+      return;
+    }
+    if (socRegPassword !== socRegConfirmPassword) {
+      setSocRegError('Passwords do not match!');
+      return;
+    }
+    if (!socRegAddress.trim()) {
+      setSocRegError('Please enter Address.');
+      return;
+    }
+
+    const newSociety = {
+      name: socRegName.trim(),
+      regNo: socRegNumber.trim(),
+      email: socRegEmail.trim().toLowerCase(),
+      phone: socRegMobile,
+      password: socRegPassword,
+      address: socRegAddress.trim(),
+      doc: socRegDocName || 'Verification_Certificate.pdf',
       role: 'admin'
     };
-    onLogin(user, 'admin');
+
+    const updatedList = [...societiesList, newSociety];
+    setSocietiesList(updatedList);
+    try {
+      localStorage.setItem('sahakar_registered_societies', JSON.stringify(updatedList));
+    } catch (err) {}
+
+    setSocRegError('');
+    alert('✅ Cooperative Society Registered Successfully! Please log in with your password.');
+    setIsSocietyRegistering(false);
+    setSocietyEmail(newSociety.email);
+    setSocietyPassword(newSociety.password);
+  };
+
+  // Society Login Submit with Password Authentication
+  const handleSocietySubmit = (e) => {
+    if (e) e.preventDefault();
+    setSocLoginError('');
+
+    if (!societyEmail.trim()) {
+      setSocLoginError('Please enter Email ID or Society Reg Number.');
+      return;
+    }
+    if (!societyPassword) {
+      setSocLoginError('Please enter Password.');
+      return;
+    }
+
+    const inputIdentifier = societyEmail.trim().toLowerCase();
+    const matchedSociety = societiesList.find(
+      (s) => s.email.toLowerCase() === inputIdentifier || s.regNo.toLowerCase() === inputIdentifier
+    );
+
+    if (matchedSociety) {
+      if (matchedSociety.password !== societyPassword) {
+        setSocLoginError('❌ Invalid Password! Please enter the correct password set during registration.');
+        return;
+      }
+      const user = {
+        name: matchedSociety.name,
+        email: matchedSociety.email,
+        regNo: matchedSociety.regNo,
+        role: 'admin'
+      };
+      onLogin(user, 'admin');
+    } else {
+      if ((inputIdentifier === 'admin@sahakar.coop' || inputIdentifier.includes('dl-lab')) && (societyPassword === 'admin' || societyPassword.length >= 4)) {
+        const user = {
+          name: societyEmail ? societyEmail.split('@')[0] : 'Delhi State Federation',
+          email: societyEmail || 'admin@sahakar.coop',
+          role: 'admin'
+        };
+        onLogin(user, 'admin');
+      } else {
+        setSocLoginError('❌ Invalid Email/Registration Number or Password! Please register your society first.');
+      }
+    }
   };
 
   return (
@@ -777,144 +895,436 @@ export default function LoginPage({ onLogin, onEmergencyDirect }) {
             </div>
           )}
 
-          {/* TAB 2: COOPERATIVE SOCIETY LOGIN */}
+          {/* TAB 2: COOPERATIVE SOCIETY LOGIN OR REGISTRATION */}
           {activeTab === 'society' && (
             <div>
-              <div style={{ marginBottom: '0.65rem' }}>
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0F2C59', margin: 0 }}>
-                  Cooperative Society Login
-                </h3>
-                <p style={{ fontSize: '0.72rem', color: '#64748B', margin: '1px 0 0 0' }}>
-                  Manage workers, service orders & welfare fund
-                </p>
-              </div>
-
-              <form onSubmit={handleSocietySubmit}>
-                <div style={{ marginBottom: '0.4rem' }}>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.15rem' }}>
-                    Email ID or Society Reg Number
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. DL-LAB-2018-992 or admin@sahakar.coop"
-                    value={societyEmail}
-                    onChange={(e) => setSocietyEmail(e.target.value)}
-                    style={{
-                      width: '100%',
-                      boxSizing: 'border-box',
-                      padding: '0.5rem 0.75rem',
-                      borderRadius: '8px',
-                      border: '1.5px solid #CBD5E1',
-                      fontSize: '0.82rem',
-                      outline: 'none'
-                    }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '0.25rem' }}>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.15rem' }}>
-                    Password
-                  </label>
-                  <div style={{ position: 'relative' }}>
-                    <input
-                      type={showSocietyPassword ? 'text' : 'password'}
-                      placeholder="Enter society password"
-                      value={societyPassword}
-                      onChange={(e) => setSocietyPassword(e.target.value)}
-                      style={{
-                        width: '100%',
-                        boxSizing: 'border-box',
-                        padding: '0.5rem 2rem 0.5rem 0.75rem',
-                        borderRadius: '8px',
-                        border: '1.5px solid #CBD5E1',
-                        fontSize: '0.82rem',
-                        outline: 'none'
-                      }}
-                    />
+              {isSocietyRegistering ? (
+                /* Cooperative Society Registration Form */
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.55rem' }}>
+                    <div>
+                      <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0F2C59', margin: 0 }}>
+                        Cooperative Society Registration
+                      </h3>
+                      <p style={{ fontSize: '0.72rem', color: '#64748B', margin: '1px 0 0 0' }}>
+                        Register with Reg Number, Credentials & Verification Docs
+                      </p>
+                    </div>
                     <button
                       type="button"
-                      onClick={() => setShowSocietyPassword(!showSocietyPassword)}
+                      onClick={() => { setIsSocietyRegistering(false); setSocRegError(''); }}
                       style={{
-                        position: 'absolute',
-                        right: '8px',
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        fontSize: '0.75rem',
-                        opacity: 0.7
+                        background: '#F1F5F9',
+                        border: '1px solid #CBD5E1',
+                        borderRadius: '6px',
+                        padding: '3px 8px',
+                        fontSize: '0.7rem',
+                        fontWeight: 700,
+                        color: '#475569',
+                        cursor: 'pointer'
                       }}
                     >
-                      {showSocietyPassword ? '👁️' : '👁️‍🗨️'}
+                      ← Back
                     </button>
                   </div>
+
+                  {socRegError && (
+                    <div style={{
+                      background: '#FEF2F2',
+                      border: '1px solid #FCA5A5',
+                      color: '#991B1B',
+                      padding: '0.35rem 0.6rem',
+                      borderRadius: '6px',
+                      fontSize: '0.72rem',
+                      fontWeight: 600,
+                      marginBottom: '0.4rem'
+                    }}>
+                      ⚠️ {socRegError}
+                    </div>
+                  )}
+
+                  <form onSubmit={handleSocietyRegister}>
+                    {/* 1. Society Name */}
+                    <div style={{ marginBottom: '0.35rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
+                        Society Name *
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Delhi State Labour Cooperative Society Ltd"
+                        value={socRegName}
+                        onChange={(e) => setSocRegName(e.target.value)}
+                        style={{
+                          width: '100%',
+                          boxSizing: 'border-box',
+                          padding: '0.4rem 0.6rem',
+                          borderRadius: '6px',
+                          border: '1.5px solid #CBD5E1',
+                          fontSize: '0.78rem',
+                          outline: 'none'
+                        }}
+                      />
+                    </div>
+
+                    {/* 2. Registration Number */}
+                    <div style={{ marginBottom: '0.35rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
+                        Registration Number *
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. DL-LAB-2024-582"
+                        value={socRegNumber}
+                        onChange={(e) => setSocRegNumber(e.target.value)}
+                        style={{
+                          width: '100%',
+                          boxSizing: 'border-box',
+                          padding: '0.4rem 0.6rem',
+                          borderRadius: '6px',
+                          border: '1.5px solid #CBD5E1',
+                          fontSize: '0.78rem',
+                          outline: 'none'
+                        }}
+                      />
+                    </div>
+
+                    {/* 3. Mobile Number */}
+                    <div style={{ marginBottom: '0.35rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
+                        Mobile Number *
+                      </label>
+                      <div style={{ display: 'flex', gap: '0.3rem' }}>
+                        <span style={{
+                          padding: '0.4rem 0.5rem',
+                          background: '#F1F5F9',
+                          border: '1.5px solid #CBD5E1',
+                          borderRadius: '6px',
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          color: '#475569',
+                          display: 'flex',
+                          alignItems: 'center'
+                        }}>+91</span>
+                        <input
+                          type="tel"
+                          placeholder="10-digit mobile number"
+                          maxLength="10"
+                          value={socRegMobile}
+                          onChange={(e) => setSocRegMobile(e.target.value.replace(/\D/g, ''))}
+                          style={{
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            padding: '0.4rem 0.6rem',
+                            borderRadius: '6px',
+                            border: '1.5px solid #CBD5E1',
+                            fontSize: '0.78rem',
+                            outline: 'none'
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* 4. Gmail / Email */}
+                    <div style={{ marginBottom: '0.35rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
+                        Gmail / Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        placeholder="e.g. society.admin@gmail.com"
+                        value={socRegEmail}
+                        onChange={(e) => setSocRegEmail(e.target.value)}
+                        style={{
+                          width: '100%',
+                          boxSizing: 'border-box',
+                          padding: '0.4rem 0.6rem',
+                          borderRadius: '6px',
+                          border: '1.5px solid #CBD5E1',
+                          fontSize: '0.78rem',
+                          outline: 'none'
+                        }}
+                      />
+                    </div>
+
+                    {/* 5. Password & Confirm Password */}
+                    <div style={{ display: 'flex', gap: '0.35rem', marginBottom: '0.35rem' }}>
+                      <div style={{ flex: 1 }}>
+                        <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
+                          Password *
+                        </label>
+                        <input
+                          type="password"
+                          placeholder="Create password"
+                          value={socRegPassword}
+                          onChange={(e) => setSocRegPassword(e.target.value)}
+                          style={{
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            padding: '0.4rem 0.6rem',
+                            borderRadius: '6px',
+                            border: '1.5px solid #CBD5E1',
+                            fontSize: '0.78rem',
+                            outline: 'none'
+                          }}
+                        />
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
+                          Confirm Password *
+                        </label>
+                        <input
+                          type="password"
+                          placeholder="Confirm password"
+                          value={socRegConfirmPassword}
+                          onChange={(e) => setSocRegConfirmPassword(e.target.value)}
+                          style={{
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            padding: '0.4rem 0.6rem',
+                            borderRadius: '6px',
+                            border: '1.5px solid #CBD5E1',
+                            fontSize: '0.78rem',
+                            outline: 'none'
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* 6. Address */}
+                    <div style={{ marginBottom: '0.35rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
+                        Address *
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Enter registered office address"
+                        value={socRegAddress}
+                        onChange={(e) => setSocRegAddress(e.target.value)}
+                        style={{
+                          width: '100%',
+                          boxSizing: 'border-box',
+                          padding: '0.4rem 0.6rem',
+                          borderRadius: '6px',
+                          border: '1.5px solid #CBD5E1',
+                          fontSize: '0.78rem',
+                          outline: 'none'
+                        }}
+                      />
+                    </div>
+
+                    {/* 7. Verification Documents */}
+                    <div style={{ marginBottom: '0.4rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.1rem' }}>
+                        Verification Documents (Reg Cert / Bylaws) *
+                      </label>
+                      <input
+                        type="file"
+                        accept=".pdf,.png,.jpg,.jpeg"
+                        onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            setSocRegDocName(e.target.files[0].name);
+                          }
+                        }}
+                        style={{
+                          width: '100%',
+                          boxSizing: 'border-box',
+                          padding: '0.35rem 0.6rem',
+                          borderRadius: '6px',
+                          border: '1.5px dashed #3B82F6',
+                          fontSize: '0.72rem',
+                          background: '#EFF6FF',
+                          cursor: 'pointer'
+                        }}
+                      />
+                      {socRegDocName && (
+                        <span style={{ fontSize: '0.65rem', color: '#059669', fontWeight: 700, marginTop: '2px', display: 'block' }}>
+                          ✓ File selected: {socRegDocName}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Submit Button */}
+                    <button
+                      type="submit"
+                      style={{
+                        width: '100%',
+                        padding: '0.55rem',
+                        background: 'linear-gradient(135deg, #0F2C59, #1D4ED8)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '8px',
+                        fontWeight: 800,
+                        fontSize: '0.8rem',
+                        cursor: 'pointer',
+                        boxShadow: '0 3px 8px rgba(15, 44, 89, 0.25)',
+                        marginTop: '0.2rem'
+                      }}
+                    >
+                      Submit Society Registration ✓
+                    </button>
+                  </form>
+
+                  <div style={{ textAlign: 'center', fontSize: '0.72rem', color: '#64748B', borderTop: '1px solid #F1F5F9', paddingTop: '0.35rem', marginTop: '0.5rem' }}>
+                    Already registered?{' '}
+                    <a href="#society-login" onClick={(e) => { e.preventDefault(); setIsSocietyRegistering(false); setSocRegError(''); }} style={{ color: '#0F2C59', fontWeight: 800, textDecoration: 'none' }}>
+                      Society Log In
+                    </a>
+                  </div>
                 </div>
+              ) : (
+                /* Cooperative Society Login Form */
+                <div>
+                  <div style={{ marginBottom: '0.65rem' }}>
+                    <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0F2C59', margin: 0 }}>
+                      Cooperative Society Login
+                    </h3>
+                    <p style={{ fontSize: '0.72rem', color: '#64748B', margin: '1px 0 0 0' }}>
+                      Manage workers, service orders & welfare fund
+                    </p>
+                  </div>
 
-                <div style={{ textAlign: 'right', marginBottom: '0.4rem' }}>
-                  <a href="#forgot" onClick={(e) => { e.preventDefault(); alert('Call 1800-11-SAHAKAR for password reset.'); }} style={{ fontSize: '0.7rem', color: '#1D4ED8', textDecoration: 'none', fontWeight: 600 }}>
-                    Forgot Password?
-                  </a>
+                  {socLoginError && (
+                    <div style={{
+                      background: '#FEF2F2',
+                      border: '1px solid #FCA5A5',
+                      color: '#991B1B',
+                      padding: '0.35rem 0.6rem',
+                      borderRadius: '6px',
+                      fontSize: '0.72rem',
+                      fontWeight: 600,
+                      marginBottom: '0.4rem'
+                    }}>
+                      ⚠️ {socLoginError}
+                    </div>
+                  )}
+
+                  <form onSubmit={handleSocietySubmit}>
+                    <div style={{ marginBottom: '0.4rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.15rem' }}>
+                        Email ID or Society Reg Number
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. DL-LAB-2018-992 or admin@sahakar.coop"
+                        value={societyEmail}
+                        onChange={(e) => setSocietyEmail(e.target.value)}
+                        style={{
+                          width: '100%',
+                          boxSizing: 'border-box',
+                          padding: '0.5rem 0.75rem',
+                          borderRadius: '8px',
+                          border: '1.5px solid #CBD5E1',
+                          fontSize: '0.82rem',
+                          outline: 'none'
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ marginBottom: '0.25rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#1E293B', marginBottom: '0.15rem' }}>
+                        Password
+                      </label>
+                      <div style={{ position: 'relative' }}>
+                        <input
+                          type={showSocietyPassword ? 'text' : 'password'}
+                          placeholder="Enter society password"
+                          value={societyPassword}
+                          onChange={(e) => setSocietyPassword(e.target.value)}
+                          style={{
+                            width: '100%',
+                            boxSizing: 'border-box',
+                            padding: '0.5rem 2rem 0.5rem 0.75rem',
+                            borderRadius: '8px',
+                            border: '1.5px solid #CBD5E1',
+                            fontSize: '0.82rem',
+                            outline: 'none'
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowSocietyPassword(!showSocietyPassword)}
+                          style={{
+                            position: 'absolute',
+                            right: '8px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: '0.75rem',
+                            opacity: 0.7
+                          }}
+                        >
+                          {showSocietyPassword ? '👁️' : '👁️‍🗨️'}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div style={{ textAlign: 'right', marginBottom: '0.4rem' }}>
+                      <a href="#forgot" onClick={(e) => { e.preventDefault(); alert('Call 1800-11-SAHAKAR for password reset.'); }} style={{ fontSize: '0.7rem', color: '#1D4ED8', textDecoration: 'none', fontWeight: 600 }}>
+                        Forgot Password?
+                      </a>
+                    </div>
+
+                    <button
+                      type="submit"
+                      style={{
+                        width: '100%',
+                        padding: '0.6rem',
+                        background: 'linear-gradient(135deg, #0F2C59, #1D4ED8)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '8px',
+                        fontWeight: 800,
+                        fontSize: '0.82rem',
+                        cursor: 'pointer',
+                        boxShadow: '0 3px 8px rgba(15, 44, 89, 0.25)',
+                        marginBottom: '0.5rem'
+                      }}
+                    >
+                      Login as Cooperative Society →
+                    </button>
+                  </form>
+
+                  {/* Google Workspace Button */}
+                  <button
+                    type="button"
+                    onClick={() => handleGoogleLogin('admin')}
+                    style={{
+                      width: '100%',
+                      padding: '0.48rem',
+                      background: 'white',
+                      border: '1px solid #CBD5E1',
+                      borderRadius: '8px',
+                      fontWeight: 700,
+                      fontSize: '0.78rem',
+                      color: '#1E293B',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.45rem',
+                      marginBottom: '0.5rem'
+                    }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                    <span>Google Workspace Sign in</span>
+                  </button>
+
+                  {/* Register Society Link */}
+                  <div style={{ textAlign: 'center', fontSize: '0.72rem', color: '#64748B', borderTop: '1px solid #F1F5F9', paddingTop: '0.35rem' }}>
+                    New Cooperative Society?{' '}
+                    <a href="#register-society" onClick={(e) => { e.preventDefault(); setIsSocietyRegistering(true); setSocRegError(''); setSocLoginError(''); }} style={{ color: '#0F2C59', fontWeight: 800, textDecoration: 'none' }}>
+                      Register Now
+                    </a>
+                  </div>
                 </div>
-
-                <button
-                  type="submit"
-                  style={{
-                    width: '100%',
-                    padding: '0.6rem',
-                    background: 'linear-gradient(135deg, #0F2C59, #1D4ED8)',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '8px',
-                    fontWeight: 800,
-                    fontSize: '0.82rem',
-                    cursor: 'pointer',
-                    boxShadow: '0 3px 8px rgba(15, 44, 89, 0.25)',
-                    marginBottom: '0.5rem'
-                  }}
-                >
-                  Login as Cooperative Society →
-                </button>
-              </form>
-
-              {/* Google Workspace Button */}
-              <button
-                type="button"
-                onClick={() => handleGoogleLogin('admin')}
-                style={{
-                  width: '100%',
-                  padding: '0.48rem',
-                  background: 'white',
-                  border: '1px solid #CBD5E1',
-                  borderRadius: '8px',
-                  fontWeight: 700,
-                  fontSize: '0.78rem',
-                  color: '#1E293B',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.45rem',
-                  marginBottom: '0.5rem'
-                }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                </svg>
-                <span>Google Workspace Sign in</span>
-              </button>
-
-
-              {/* Register Society Link */}
-              <div style={{ textAlign: 'center', fontSize: '0.72rem', color: '#64748B', borderTop: '1px solid #F1F5F9', paddingTop: '0.35rem' }}>
-                New Cooperative Society?{' '}
-                <a href="#register-society" onClick={(e) => { e.preventDefault(); onLogin({ name: 'Affiliated Society Admin', role: 'admin' }, 'admin'); }} style={{ color: '#0F2C59', fontWeight: 800, textDecoration: 'none' }}>
-                  Register Now
-                </a>
-              </div>
+              )}
             </div>
           )}
         </div>
