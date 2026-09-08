@@ -108,7 +108,7 @@ export default function ServiceCatalog({ onSelectCategory }) {
                   style={{ padding: '8px 16px', fontSize: '0.875rem' }}
                   onClick={() => onSelectCategory(service)}
                 >
-                  Match Worker 📍
+                  Add 📍
                 </button>
               </div>
             </div>
